@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UserAPI.DBAccess;
-using UserAPI.Domain;
+using sportex.api.persistence;
+using sportex.api.domain;
 using System.Linq;
 
-namespace UserAPI.Logic
+namespace sportex.api.logic
 {
     public class UserManager
     {

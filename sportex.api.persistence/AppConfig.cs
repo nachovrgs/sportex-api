@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UserAPI.DBAccess
+namespace sportex.api.persistence
 {
     public class AppConfig
     {

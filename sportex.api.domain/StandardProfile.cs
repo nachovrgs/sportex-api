@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UserAPI.Domain
+namespace sportex.api.domain
 {
     public class StandardProfile : BaseProfile
     {

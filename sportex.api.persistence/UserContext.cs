@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using UserAPI.Domain;
+using sportex.api.domain;
 using Microsoft.Extensions.Configuration;
 
-namespace UserAPI.DBAccess
+namespace sportex.api.persistence
 {
     public class UserContext : DbContext
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace UserAPI.DBAccess
+namespace sportex.api.persistence
 {
     public interface IRepository<T>
     {
