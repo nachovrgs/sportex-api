@@ -8,20 +8,20 @@ using sportex.api.logic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace UserAPI.Web.Controllers
+namespace sportex.api.web.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : BaseController
+    public class AccountController : BaseController
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<Account> Get()
         {
             //return new string[] { "value1", "value2" };
             try
             {
-                UserManager um = new UserManager();
-                return um.GetAllUsers();
+                AccountManager am = new AccountManager();
+                return am.GetAllAccounts();
             }
             catch(Exception ex)
             {
@@ -38,12 +38,12 @@ namespace UserAPI.Web.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]User user)
+        public void Post([FromBody]Account account)
         {
             try
             {
-                UserManager um = new UserManager();
-                um.InsertUser(user);
+                AccountManager am = new AccountManager();
+                am.InsertAccount(account);
             }
             catch (Exception ex)
             {

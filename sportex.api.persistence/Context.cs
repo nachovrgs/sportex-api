@@ -7,12 +7,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace sportex.api.persistence
 {
-    public class UserContext : DbContext
+    public class Context : DbContext
     {
         IConfigurationRoot configuration;
-        public UserContext(DbContextOptions<UserContext> options) : base(options)
+        public Context(DbContextOptions<Context> options) : base(options)
         { }
-        public UserContext() : base()
+        public Context() : base()
         {        
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,7 +29,7 @@ namespace sportex.api.persistence
             }
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<AdminProfile> AdminProfiles { get; set; }
         public DbSet<StandardProfile> StandardProfiles { get; set; }
         public DbSet<AdminRole> AdminRoles { get; set; }

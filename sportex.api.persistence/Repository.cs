@@ -21,7 +21,7 @@ namespace sportex.api.persistence
         {
             try
             {
-                using (var dataContext = new UserContext())
+                using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
                     DbSet.Add(entity);
@@ -38,7 +38,7 @@ namespace sportex.api.persistence
         {
             try
             {
-                using (var dataContext = new UserContext())
+                using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
                     DbSet.Remove(entity);
@@ -55,7 +55,7 @@ namespace sportex.api.persistence
         {
             try
             {
-                using (var dataContext = new UserContext())
+                using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
                     return DbSet.Where(predicate);
@@ -71,7 +71,7 @@ namespace sportex.api.persistence
         {
             try
             {
-                using (var dataContext = new UserContext())
+                using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
                     return DbSet.ToList<T>();
@@ -87,7 +87,7 @@ namespace sportex.api.persistence
         {
             try
             {
-                using (var dataContext = new UserContext())
+                using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
                     return DbSet.Find(id);

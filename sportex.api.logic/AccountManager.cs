@@ -7,31 +7,31 @@ using System.Linq;
 
 namespace sportex.api.logic
 {
-    public class UserManager
+    public class AccountManager
     {
-        IRepository<User> repo;
-        public UserManager()
+        IRepository<Account> repo;
+        public AccountManager()
         {
-            repo = new Repository<User>();
+            repo = new Repository<Account>();
         }
-        public List<User> GetAllUsers()
+        public List<Account> GetAllAccounts()
         {
             try
             {
-                List<User> users = new List<User>();
-                users = repo.GetAll();
-                return users;
+                List<Account> accounts = new List<Account>();
+                accounts = repo.GetAll();
+                return accounts;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public void InsertUser(User user)
+        public void InsertAccount(Account account)
         {
             try
             {
-                repo.Insert(user);
+                repo.Insert(account);
             }
             catch(Exception ex)
             {

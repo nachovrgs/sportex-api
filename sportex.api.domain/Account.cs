@@ -5,7 +5,7 @@ using System.Text;
 
 namespace sportex.api.domain
 {
-    public class User
+    public class Account
     {
         #region PROPERTIES
         [Key]
@@ -20,7 +20,7 @@ namespace sportex.api.domain
         #endregion
 
         #region CONSTRUCTORS
-        public User(string uname, string pass, int stat, DateTime created, DateTime updated, DateTime access)
+        public Account(string uname, string pass, int stat, DateTime created, DateTime updated, DateTime access)
         {
             this.Username = uname;
             this.Password = pass;
@@ -29,7 +29,7 @@ namespace sportex.api.domain
             this.LastUpdate = updated;
             this.LastAccess = access;
         }
-        public User()
+        public Account()
         {
             this.Username = "undefined";
             this.Password = "";
@@ -38,7 +38,7 @@ namespace sportex.api.domain
             this.LastUpdate = DateTime.Now;
             this.LastAccess = DateTime.Now;
         }
-        public User(string uname, string pass)
+        public Account(string uname, string pass)
         {
             this.Username = uname;
             this.Password = pass;

@@ -13,7 +13,7 @@ namespace sportex.api.domain
 
         #region CONSTRUCTORS
 
-        public AdminProfile(User user, string mail, string firstn, string lastn, string pic) : base(user, mail, firstn, lastn, pic)
+        public AdminProfile(Account account, string mail, string firstn, string lastn, string pic) : base(account, mail, firstn, lastn, pic)
         {
             this.Roles = new List<AdminRole>();
         }

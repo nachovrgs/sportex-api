@@ -11,7 +11,7 @@ namespace sportex.api.domain
         [Key]
         public int ID { get; set; }
         public int ProfileId { get; set; }
-        public User User { get; set; }
+        public Account Account { get; set; }
         public string MailAddress { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -23,9 +23,9 @@ namespace sportex.api.domain
         #endregion
 
         #region CONSTRUCTORS
-        public BaseProfile(User user, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
+        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
         {
-            this.User = user;
+            this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;
             this.LastName = lastn;
@@ -36,7 +36,7 @@ namespace sportex.api.domain
         }
         public BaseProfile()
         {
-            this.User = null;
+            this.Account = null;
             this.MailAddress = "";
             this.FirstName = "";
             this.LastName = "";
@@ -45,9 +45,9 @@ namespace sportex.api.domain
             this.CreatedOn = DateTime.Now;
             this.LastUpdate = DateTime.Now;
         }
-        public BaseProfile(User user, string mail, string firstn, string lastn, string pic)
+        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic)
         {
-            this.User = user;
+            this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;
             this.LastName = lastn;
