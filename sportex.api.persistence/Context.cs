@@ -29,9 +29,27 @@ namespace sportex.api.persistence
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            try
+            {
+                //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile1).WithOne().HasForeignKey<Relationship>(r => r.Profile2);
+                //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile2).WithOne().HasForeignKey<Relationship>(r => r.Profile1);
+                modelBuilder.Entity<Relationship>().HasKey(r => new { r.ID, r.IdProfile1, r.IdProfile2 });
+
+                modelBuilder.Entity<Relationship>().HasOne(x => x.Profile1).WithMany(y => y.Relationships1).HasForeignKey(x => x.IdProfile1).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<Relationship>().HasOne(x => x.Profile2).WithMany(y => y.Relationships2).HasForeignKey(x => x.IdProfile2);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en la conexión con la base de datos: " + ex.Message);
+    }
+}
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AdminProfile> AdminProfiles { get; set; }
         public DbSet<StandardProfile> StandardProfiles { get; set; }
         public DbSet<AdminRole> AdminRoles { get; set; }
+        public DbSet<Relationship> Relationships { get; set; }
     }
 }

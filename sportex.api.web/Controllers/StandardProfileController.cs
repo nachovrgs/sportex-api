@@ -6,24 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.logic;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace sportex.api.web.Controllers
 {
-    [Route("api/[controller]")]
-    public class AccountController : BaseController
+    [Produces("application/json")]
+    [Route("api/StandardProfile")]
+    public class StandardProfileController : BaseController
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Account> Get()
+        public IEnumerable<StandardProfile> Get()
         {
             //return new string[] { "value1", "value2" };
             try
             {
-                AccountManager am = new AccountManager();
-                return am.GetAllAccounts();
+                StandardProfileManager spm = new StandardProfileManager();
+                return spm.GetAllProfiles();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -31,21 +30,32 @@ namespace sportex.api.web.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public StandardProfile Get(int id)
         {
-            return "value";
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                return spm.GetProfileById(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]Account account)
+        public void Post([FromBody]StandardProfile profile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    AccountManager am = new AccountManager();
-                    am.InsertAccount(account);
+                    if (profile != null)
+                    {
+                        StandardProfileManager spm = new StandardProfileManager();
+                        spm.InsertProfile(profile);
+                    }
                 }
                 else
                 {
@@ -58,13 +68,13 @@ namespace sportex.api.web.Controllers
             }
         }
 
-        // PUT api/<controller>/5
+        // PUT: api/StandardProfile/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/<controller>/5
+        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

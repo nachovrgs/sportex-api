@@ -10,7 +10,6 @@ namespace sportex.api.domain
         #region PROPERTIES
         [Key]
         public int ID { get; set; }
-        public int ProfileId { get; set; }
         public Account Account { get; set; }
         public string MailAddress { get; set; }
         public string FirstName { get; set; }
