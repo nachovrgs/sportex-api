@@ -35,7 +35,8 @@ namespace sportex.api.persistence
             {
                 //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile1).WithOne().HasForeignKey<Relationship>(r => r.Profile2);
                 //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile2).WithOne().HasForeignKey<Relationship>(r => r.Profile1);
-                modelBuilder.Entity<Relationship>().HasKey(r => new { r.ID, r.IdProfile1, r.IdProfile2 });
+                //modelBuilder.Entity<Relationship>().HasKey(r => new { r.ID, r.IdProfile1, r.IdProfile2 });
+                modelBuilder.Entity<Relationship>().HasKey(r => new { r.IdProfile1, r.IdProfile2 });
 
                 modelBuilder.Entity<Relationship>().HasOne(x => x.Profile1).WithMany(y => y.Relationships1).HasForeignKey(x => x.IdProfile1).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<Relationship>().HasOne(x => x.Profile2).WithMany(y => y.Relationships2).HasForeignKey(x => x.IdProfile2);

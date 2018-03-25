@@ -21,7 +21,7 @@ namespace sportex.api.domain
 
         #region CONSTRUCTORS
 
-        public StandardProfile(Account account, string mail, string firstn, string lastn, string pic, DateTime birth, int sex) : base(account, mail, firstn, lastn, pic)
+        public StandardProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic, DateTime birth, int sex) : base(idAcc, account, mail, firstn, lastn, pic)
         {
             this.DateOfBirth = birth;
             this.Sex = sex;

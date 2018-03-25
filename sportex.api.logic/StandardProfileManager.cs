@@ -19,6 +19,13 @@ namespace sportex.api.logic
             {
                 List<StandardProfile> profiles = new List<StandardProfile>();
                 profiles = repo.GetAll();
+
+                IRepository<Account> repoAccount = new Repository<Account>();
+                foreach (StandardProfile prof in profiles)
+                {
+                    prof.Account = repoAccount.GetById(prof.AccountID);
+                }
+
                 return profiles;
             }
             catch (Exception ex)

@@ -10,8 +10,10 @@ namespace sportex.api.persistence
     {
         void Insert(T entity);
         void Delete(T entity);
-        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
+        List<T> SearchFor(Expression<Func<T, bool>> predicate);
+        //IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
         List<T> GetAll();
         T GetById(int id);
+        void Update(T entity);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace sportex.api.domain
@@ -10,6 +11,8 @@ namespace sportex.api.domain
         #region PROPERTIES
         [Key]
         public int ID { get; set; }
+        public int AccountID { get; set; }
+        [ForeignKey("AccountID")]
         public Account Account { get; set; }
         public string MailAddress { get; set; }
         public string FirstName { get; set; }
@@ -22,8 +25,9 @@ namespace sportex.api.domain
         #endregion
 
         #region CONSTRUCTORS
-        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
+        public BaseProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
         {
+            this.AccountID = idAcc;
             this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;
@@ -35,6 +39,7 @@ namespace sportex.api.domain
         }
         public BaseProfile()
         {
+            this.AccountID = 0;
             this.Account = null;
             this.MailAddress = "";
             this.FirstName = "";
@@ -44,8 +49,9 @@ namespace sportex.api.domain
             this.CreatedOn = DateTime.Now;
             this.LastUpdate = DateTime.Now;
         }
-        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic)
+        public BaseProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic)
         {
+            this.AccountID = idAcc;
             this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;

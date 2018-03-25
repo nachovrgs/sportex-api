@@ -56,5 +56,50 @@ namespace sportex.api.web.Controllers
         public void Delete(int id)
         {
         }
+
+        [HttpPost]
+        [Route("SendFriendRequest")]
+        public string SendFriendRequest([FromBody]FriendRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    RelationshipManager rm = new RelationshipManager();
+                    return rm.SendFriendRequest(request.idSends, request.idReceives);
+                }
+                return "Los datos ingresados no son correctos";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        [Route("AcceptFriendRequest")]
+        public string AcceptFriendRequest([FromBody]FriendRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    RelationshipManager rm = new RelationshipManager();
+                    return rm.AcceptFriendRequest(request.idSends, request.idReceives);
+                }
+                return "Los datos ingresados no son correctos";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public class FriendRequest
+        {
+            public int idSends { get; set; }
+            public int idReceives { get; set; }
+        }
     }
 }

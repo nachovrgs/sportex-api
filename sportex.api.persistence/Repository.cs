@@ -15,8 +15,6 @@ namespace sportex.api.persistence
         {
         }
 
-        #region IRepository<T> Members
-
         public void Insert(T entity)
         {
             try
@@ -51,14 +49,14 @@ namespace sportex.api.persistence
             }
         }
 
-        public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
+        public List<T> SearchFor(Expression<Func<T, bool>> predicate)
         {
             try
             {
                 using (var dataContext = new Context())
                 {
                     DbSet = dataContext.Set<T>();
-                    return DbSet.Where(predicate);
+                    return DbSet.Where(predicate).ToList<T>();
                 }
             }
             catch (Exception ex)
@@ -66,6 +64,21 @@ namespace sportex.api.persistence
                 throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
             }
         }
+        //public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
+        //{
+        //    try
+        //    {
+        //        using (var dataContext = new Context())
+        //        {
+        //            DbSet = dataContext.Set<T>();
+        //            return DbSet.Where(predicate);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
+        //    }
+        //}
 
         public List<T> GetAll()
         {
@@ -99,77 +112,23 @@ namespace sportex.api.persistence
             }
         }
 
-        #endregion
+        public void Update(T entity)
+        {
+            try
+            {
+                using (var dataContext = new Context())
+                {
+                    var entry = dataContext.Entry(entity);
+                    entry.State = EntityState.Modified;
+                    dataContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
+            }
+        }
 
-        //VIEJO
 
-        //public Repository(DbContext dataContext)
-        //{
-        //    DbSet = dataContext.Set<T>();
-        //}
-
-        //#region IRepository<T> Members
-
-        //public void Insert(T entity)
-        //{
-        //    try
-        //    {
-        //        DbSet.Add(entity);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos.");
-        //    }
-        //}
-
-        //public void Delete(T entity)
-        //{
-        //    try
-        //    {
-        //        DbSet.Remove(entity);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos.");
-        //    }
-        //}
-
-        //public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
-        //{
-        //    try
-        //    {
-        //        return DbSet.Where(predicate);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos.");
-        //    }
-        //}
-
-        //public IQueryable<T> GetAll()
-        //{
-        //    try
-        //    {
-        //        return DbSet;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos.");
-        //    }
-        //}
-
-        //public T GetById(int id)
-        //{
-        //    try
-        //    {
-        //        return DbSet.Find(id);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos.");
-        //    }
-        //}
-
-        //#endregion
     }
 }
