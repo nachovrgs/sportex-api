@@ -15,6 +15,8 @@ namespace sportex.api.domain
         public ICollection<Relationship> Relationships1 { get; set; }
         [InverseProperty("Profile2")]
         public ICollection<Relationship> Relationships2 { get; set; }
+        [InverseProperty("ProfileParticipant")]
+        public ICollection<EventParticipant> ProfileParticipant { get; set; }
 
 
         #endregion

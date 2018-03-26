@@ -33,13 +33,16 @@ namespace sportex.api.persistence
         {
             try
             {
-                //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile1).WithOne().HasForeignKey<Relationship>(r => r.Profile2);
-                //modelBuilder.Entity<Relationship>().HasOne(r => r.Profile2).WithOne().HasForeignKey<Relationship>(r => r.Profile1);
-                //modelBuilder.Entity<Relationship>().HasKey(r => new { r.ID, r.IdProfile1, r.IdProfile2 });
+                //for Relationships
                 modelBuilder.Entity<Relationship>().HasKey(r => new { r.IdProfile1, r.IdProfile2 });
-
                 modelBuilder.Entity<Relationship>().HasOne(x => x.Profile1).WithMany(y => y.Relationships1).HasForeignKey(x => x.IdProfile1).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<Relationship>().HasOne(x => x.Profile2).WithMany(y => y.Relationships2).HasForeignKey(x => x.IdProfile2);
+
+
+                //for EventParticipants
+                modelBuilder.Entity<EventParticipant>().HasKey(ep => new { ep.EventID, ep.StandardProfileID });
+                modelBuilder.Entity<EventParticipant>().HasOne(x => x.EventParticipates).WithMany(y => y.EventParticipates).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<EventParticipant>().HasOne(x => x.ProfileParticipant).WithMany(y => y.ProfileParticipant).HasForeignKey(x => x.StandardProfileID);
             }
             catch (Exception ex)
             {
@@ -52,5 +55,7 @@ namespace sportex.api.persistence
         public DbSet<StandardProfile> StandardProfiles { get; set; }
         public DbSet<AdminRole> AdminRoles { get; set; }
         public DbSet<Relationship> Relationships { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventParticipant> EventParticipants { get; set; }
     }
 }

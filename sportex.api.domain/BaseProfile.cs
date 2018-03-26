@@ -45,9 +45,9 @@ namespace sportex.api.domain
             this.FirstName = "";
             this.LastName = "";
             this.PicturePath = "";
-            this.Status = 0;
+            this.Status = 1;
             this.CreatedOn = DateTime.Now;
-            this.LastUpdate = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
         }
         public BaseProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic)
         {
@@ -59,7 +59,7 @@ namespace sportex.api.domain
             this.PicturePath = pic;
             this.Status = 1;
             this.CreatedOn = DateTime.Now;
-            this.LastUpdate = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
         }
 
         #endregion
