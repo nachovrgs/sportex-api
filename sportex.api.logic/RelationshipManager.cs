@@ -79,6 +79,26 @@ namespace sportex.api.logic
         //        throw ex;
         //    }
         //}
+
+        private void UpdateRelationship(Relationship sends, Relationship receives)
+        {
+            try
+            {
+                if (sends != null)
+                {
+                    repo.Update(sends);
+                }
+                if (receives != null)
+                {
+                    repo.Update(receives);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region SEND FRIEND REQUEST
@@ -282,25 +302,6 @@ namespace sportex.api.logic
         #endregion
 
         #region OTHER METHODS
-
-        private void UpdateRelationship(Relationship sends, Relationship receives)
-        {
-            try
-            {
-                if (sends != null)
-                {
-                    repo.Update(sends);
-                }
-                if (receives != null)
-                {
-                    repo.Update(receives);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         //Gets all friend requests from a profile
         public List<StandardProfile> GetFriendRequests(int idProfile)

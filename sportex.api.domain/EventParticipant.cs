@@ -15,12 +15,13 @@ namespace sportex.api.domain
         [ForeignKey("EventID")]
         public Event EventParticipates { get; set; }
         public int Type { get; set; }
+        public int Order { get; set; }
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastUpdate { get; set; }
         #endregion
 
-        #region CONSTRUCTOR
+        #region CONSTRUCTORS
         public EventParticipant()
         {
             this.StandardProfileID = 0;
@@ -28,6 +29,20 @@ namespace sportex.api.domain
             this.EventID = 0;
             this.EventParticipates = null;
             this.Type = 0;
+            this.Order = 0;
+            this.Status = 1;
+            this.CreatedOn = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
+        }
+
+        public EventParticipant(int profileId, int eventId, ParticipationType parType, int ord)
+        {
+            this.StandardProfileID = profileId;
+            this.ProfileParticipant = null;
+            this.EventID = eventId;
+            this.EventParticipates = null;
+            this.Type = (int)parType;
+            this.Order = ord;
             this.Status = 1;
             this.CreatedOn = DateTime.Now;
             this.LastUpdate = this.CreatedOn;

@@ -11,7 +11,7 @@ namespace sportex.api.web.Controllers
 {
     [Produces("application/json")]
     [Route("api/Relationship")]
-    public class RelationshipController : Controller
+    public class RelationshipController : BaseController
     {
         // GET: api/Relationship
         [HttpGet]
@@ -21,7 +21,8 @@ namespace sportex.api.web.Controllers
         }
 
         // GET: api/Relationship/5
-        [HttpGet("{id}", Name = "Get")]
+        //[HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
