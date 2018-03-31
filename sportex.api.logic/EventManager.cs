@@ -239,6 +239,8 @@ namespace sportex.api.logic
                             firstSub.Type = (int)EventParticipant.ParticipationType.Starting;
                             firstSub.Order = eve.CountStarters;
                             UpdateParticipant(firstSub);
+                            eve.CountSubs -= 1;
+                            UpdateEvent(eve);
                             //NOTIFICAR AL PRIMER SUPLENTE
                         }
                         else
