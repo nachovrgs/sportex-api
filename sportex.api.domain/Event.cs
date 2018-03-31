@@ -43,8 +43,11 @@ namespace sportex.api.domain
             this.Description = "";
             this.EventType = 0;
             this.StartingTime = DateTime.Now;
-            this.MaxStarters = 10;
-            this.MaxSubs = 10;
+            //this.MaxStarters = 10;
+            //this.MaxSubs = 10;
+            //para testing
+            this.MaxStarters = 3;
+            this.MaxSubs = 3;
             this.CountStarters = 0;
             this.CountSubs = 0;
             this.LocationID = 0;

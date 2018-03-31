@@ -169,7 +169,7 @@ namespace sportex.api.logic
                         InsertParticipant(newParticipant);
                         eve.CountSubs += 1;
                         UpdateEvent(eve);
-                        return "Se ha ingresado al evento " + eve.EventName + " como suplente.";
+                        return profile.FirstName + " " + profile.LastName + " ha ingresado al evento " + eve.EventName + " como suplente.";
                     }
                     else
                     {
@@ -178,7 +178,7 @@ namespace sportex.api.logic
                         InsertParticipant(newParticipant);
                         eve.CountStarters += 1;
                         UpdateEvent(eve);
-                        return "Se ha ingresado al evento " + eve.EventName + " como titular.";
+                        return profile.FirstName + " " + profile.LastName + " ha ingresado al evento " + eve.EventName + " como titular.";
                     }
                 }
             }
@@ -235,9 +235,10 @@ namespace sportex.api.logic
                         {
                             //Hay suplentes, el primer suplente toma su lugar         
                             EventParticipant firstSub = GetFirstSubstitute(eve.ID);
-                            UpdateOrder(participant, EventParticipant.ParticipationType.Substitute); //Actualiza el orden de los suplentes
+                            UpdateOrder(firstSub, EventParticipant.ParticipationType.Substitute); //Actualiza el orden de los suplentes
                             firstSub.Type = (int)EventParticipant.ParticipationType.Starting;
                             firstSub.Order = eve.CountStarters;
+                            UpdateParticipant(firstSub);
                             //NOTIFICAR AL PRIMER SUPLENTE
                         }
                         else
@@ -279,7 +280,7 @@ namespace sportex.api.logic
         {
             try
             {
-                return repoParticipants.SearchFor(p => p.EventID == eventId && p.Type == (int)EventParticipant.ParticipationType.Starting && p.Order == 1).FirstOrDefault<EventParticipant>();
+                return repoParticipants.SearchFor(p => p.EventID == eventId && p.Type == (int)EventParticipant.ParticipationType.Substitute && p.Order == 1).FirstOrDefault<EventParticipant>();
             }
             catch (Exception ex)
             {
