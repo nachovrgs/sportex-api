@@ -26,6 +26,15 @@ namespace sportex.api.logic
             {
                 List<Event> events = new List<Event>();
                 events = repoEvents.GetAll();
+
+                //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
+                foreach (Event eve in events)
+                {
+                    StandardProfileManager spm = new StandardProfileManager();
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
+                }
+
                 return events;
             }
             catch (Exception ex)
@@ -62,7 +71,12 @@ namespace sportex.api.logic
         {
             try
             {
-                return repoEvents.GetById(id);
+                Event eve = repoEvents.GetById(id);
+                //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
+                //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
+                StandardProfileManager spm = new StandardProfileManager();
+                eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                return eve;
             }
             catch (Exception ex)
             {

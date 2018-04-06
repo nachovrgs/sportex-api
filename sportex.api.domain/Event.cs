@@ -43,11 +43,6 @@ namespace sportex.api.domain
             this.Description = "";
             this.EventType = 0;
             this.StartingTime = DateTime.Now;
-            //this.MaxStarters = 10;
-            //this.MaxSubs = 10;
-            //para testing
-            this.MaxStarters = 3;
-            this.MaxSubs = 3;
             this.CountStarters = 0;
             this.CountSubs = 0;
             this.LocationID = 0;
@@ -56,6 +51,34 @@ namespace sportex.api.domain
             this.Status = 1;
             this.CreatedOn = DateTime.Now;
             this.LastUpdate = this.CreatedOn;
+
+            //para produccion
+            this.MaxStarters = 10;
+            this.MaxSubs = 10;
+
+            //para testing
+            //this.MaxStarters = 3;
+            //this.MaxSubs = 3;
+        }
+
+        public Event(int profileId, string name, string desc, int type, DateTime? startTime, int locationId, bool ispublic, int maxStart, int maxSub)
+        {
+            this.StandardProfileID = profileId;
+            this.CreatorProfile = null;
+            this.EventName = name;
+            this.Description = desc;
+            this.EventType = type;
+            this.StartingTime = startTime;
+            this.CountStarters = 0;
+            this.CountSubs = 0;
+            this.LocationID = locationId;
+            this.Location = null;
+            this.IsPublic = ispublic;
+            this.Status = 1;
+            this.CreatedOn = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
+            this.MaxStarters = maxStart;
+            this.MaxSubs = maxSub;
         }
         #endregion
 

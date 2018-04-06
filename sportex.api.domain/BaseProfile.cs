@@ -6,7 +6,7 @@ using System.Text;
 
 namespace sportex.api.domain
 {
-    public class BaseProfile
+    public abstract class BaseProfile
     {
         #region PROPERTIES
         [Key]
