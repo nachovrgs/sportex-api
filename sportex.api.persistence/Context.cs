@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using sportex.api.domain;
 using Microsoft.Extensions.Configuration;
+using sportex.api.domain.notification;
 
 namespace sportex.api.persistence
 {
@@ -57,5 +58,6 @@ namespace sportex.api.persistence
         public DbSet<Relationship> Relationships { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventParticipant> EventParticipants { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

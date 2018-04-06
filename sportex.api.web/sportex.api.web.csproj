@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\sportex.api.domain\sportex.api.domain.csproj" />
     <ProjectReference Include="..\sportex.api.logic\sportex.api.logic.csproj" />
+    <ProjectReference Include="..\sportex.api.persistence\sportex.api.persistence.csproj" />
   </ItemGroup>
 
 </Project>
