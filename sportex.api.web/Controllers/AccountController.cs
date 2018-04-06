@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.logic;
+using sportex.api.web.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,13 +16,18 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Account> Get()
+        public IEnumerable<AccountDTO> Get()
         {
-            //return new string[] { "value1", "value2" };
             try
             {
                 AccountManager am = new AccountManager();
-                return am.GetAllAccounts();
+                List<Account> listAccounts = am.GetAllAccounts();
+                List<AccountDTO> listDTOs = new List<AccountDTO>();
+                foreach(Account account in listAccounts)
+                {
+                    listDTOs.Add(new AccountDTO(account));
+                }
+                return listDTOs;
             }
             catch(Exception ex)
             {
@@ -31,21 +37,42 @@ namespace sportex.api.web.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public AccountDTO Get(int id)
         {
-            return "value";
+            try
+            {
+                AccountManager am = new AccountManager();
+                Account account = am.GetAccountById(id);
+                if(account!=null)
+                {
+                    return new AccountDTO(account);
+                }
+                else
+                {
+                    //mostrar error
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]Account account)
+        public void Post([FromBody]AccountDTO accountDTO)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    AccountManager am = new AccountManager();
-                    am.InsertAccount(account);
+                    if (accountDTO != null)
+                    {
+                        Account account = accountDTO.MapFromDTO();
+                        AccountManager am = new AccountManager();
+                        am.InsertAccount(account);
+                    }
                 }
                 else
                 {

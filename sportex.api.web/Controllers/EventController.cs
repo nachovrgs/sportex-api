@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.logic;
+using sportex.api.web.DTO;
 
 namespace sportex.api.web.Controllers
 {
@@ -15,12 +16,18 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/Event
         [HttpGet]
-        public IEnumerable<Event> Get()
+        public IEnumerable<EventDTO> Get()
         {
             try
             {
                 EventManager em = new EventManager();
-                return em.GetAllEvents();
+                List<Event> listEvents = em.GetAllEvents();
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return listDTOs;
             }
             catch (Exception ex)
             {
@@ -31,12 +38,21 @@ namespace sportex.api.web.Controllers
         // GET: api/Event/5
         //[HttpGet("{id}", Name = "Get")]
         [HttpGet("{id}")]
-        public Event Get(int id)
+        public EventDTO Get(int id)
         {
             try
             {
                 EventManager em = new EventManager();
-                return em.GetEventById(id);
+                Event eve = em.GetEventById(id);
+                if (eve != null)
+                {
+                    return new EventDTO(eve);
+                }
+                else
+                {
+                    //mostrar error
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -46,14 +62,15 @@ namespace sportex.api.web.Controllers
         
         // POST: api/Event
         [HttpPost]
-        public void Post([FromBody]Event eve)
+        public void Post([FromBody]EventDTO eventDTO)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (eve != null)
+                    if (eventDTO != null)
                     {
+                        Event eve = eventDTO.MapFromDTO();
                         EventManager em = new EventManager();
                         em.InsertEvent(eve);
                     }

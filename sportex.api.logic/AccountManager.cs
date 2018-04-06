@@ -27,6 +27,17 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public Account GetAccountById(int id)
+        {
+            try
+            {
+                return repo.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public void InsertAccount(Account account)
         {
             try

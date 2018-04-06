@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.logic;
+using sportex.api.web.DTO;
 
 namespace sportex.api.web.Controllers
 {
@@ -14,13 +15,18 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<StandardProfile> Get()
+        public IEnumerable<StandardProfileDTO> Get()
         {
-            //return new string[] { "value1", "value2" };
             try
             {
                 StandardProfileManager spm = new StandardProfileManager();
-                return spm.GetAllProfiles();
+                List<StandardProfile> listProfiles = spm.GetAllProfiles();
+                List<StandardProfileDTO> listDTOs = new List<StandardProfileDTO>();
+                foreach (StandardProfile profile in listProfiles)
+                {
+                    listDTOs.Add(new StandardProfileDTO(profile));
+                }
+                return listDTOs;
             }
             catch (Exception ex)
             {
@@ -30,12 +36,21 @@ namespace sportex.api.web.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public StandardProfile Get(int id)
+        public StandardProfileDTO Get(int id)
         {
             try
             {
                 StandardProfileManager spm = new StandardProfileManager();
-                return spm.GetProfileById(id);
+                StandardProfile profile = spm.GetProfileById(id);
+                if (profile != null)
+                {
+                    return new StandardProfileDTO(profile);
+                }
+                else
+                {
+                    //mostrar error
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -45,14 +60,15 @@ namespace sportex.api.web.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]StandardProfile profile)
+        public void Post([FromBody]StandardProfileDTO profileDTO)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (profile != null)
+                    if (profileDTO != null)
                     {
+                        StandardProfile profile = profileDTO.MapFromDTO();
                         StandardProfileManager spm = new StandardProfileManager();
                         spm.InsertProfile(profile);
                     }
