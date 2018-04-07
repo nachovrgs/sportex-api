@@ -10,7 +10,7 @@ namespace sportex.api.domain.notification
         #region PROPERTIES
         [Key]
         public int ID { get; set; }
-        public BaseProfile Profile { get; set; }
+        public StandardProfile Profile { get; set; }
         public NotificationStatus Status { get; set; }
         public String Message { get; set; }
         public DateTime CreatedOn { get; set; }
@@ -18,7 +18,7 @@ namespace sportex.api.domain.notification
         #endregion
 
         #region CONSTRUCTORS
-        public Notification(BaseProfile profile, NotificationStatus status, String message)
+        public Notification(StandardProfile profile, NotificationStatus status, String message)
         {
             this.Profile = profile;
             this.Status = status;
@@ -26,7 +26,7 @@ namespace sportex.api.domain.notification
             this.CreatedOn = DateTime.Now;
         }
     
-        public Notification(BaseProfile profile, String message)
+        public Notification(StandardProfile profile, String message)
         {
             this.Profile = profile;
             this.Message = message;
