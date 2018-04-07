@@ -62,7 +62,7 @@ namespace sportex.api.web.Controllers
         
         // POST: api/Event
         [HttpPost]
-        public void Post([FromBody]EventDTO eventDTO)
+        public IActionResult Post([FromBody]EventDTO eventDTO)
         {
             try
             {
@@ -73,11 +73,13 @@ namespace sportex.api.web.Controllers
                         Event eve = eventDTO.MapFromDTO();
                         EventManager em = new EventManager();
                         em.InsertEvent(eve);
+                        return StatusCode(200);
                     }
+                    return StatusCode(400);
                 }
                 else
                 {
-                    //error
+                    return StatusCode(400);
                 }
             }
             catch (Exception ex)
@@ -88,28 +90,31 @@ namespace sportex.api.web.Controllers
         
         // PUT: api/Event/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]string value)
         {
+            return StatusCode(403);
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            return StatusCode(403);
         }
 
         [HttpPost]
         [Route("JoinEvent")]
-        public string JoinEvent([FromBody]EventRequest request)
+        public IActionResult JoinEvent([FromBody]EventRequest request)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     EventManager em = new EventManager();
-                    return em.JoinEvent(request.idProfile, request.idEvent);
+                    em.JoinEvent(request.idProfile, request.idEvent);
+                    return StatusCode(200);
                 }
-                return "Los datos ingresados no son correctos";
+                return StatusCode(400);
             }
             catch (Exception ex)
             {
@@ -118,16 +123,17 @@ namespace sportex.api.web.Controllers
         }
         [HttpPost]
         [Route("LeaveEvent")]
-        public string LeaveEvent([FromBody]EventRequest request)
+        public IActionResult LeaveEvent([FromBody]EventRequest request)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     EventManager em = new EventManager();
-                    return em.LeaveEvent(request.idProfile, request.idEvent);
+                    em.LeaveEvent(request.idProfile, request.idEvent);
+                    return StatusCode(200);
                 }
-                return "Los datos ingresados no son correctos";
+                return StatusCode(400);
             }
             catch (Exception ex)
             {

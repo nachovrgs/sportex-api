@@ -30,7 +30,7 @@ namespace sportex.api.web.Controllers
         
         // POST: api/Relationship
         [HttpPost]
-        public void Post([FromBody]Relationship relationship)
+        public IActionResult Post([FromBody]Relationship relationship)
         {
             try
             {
@@ -38,7 +38,9 @@ namespace sportex.api.web.Controllers
                 {
                     RelationshipManager rm = new RelationshipManager();
                     rm.InsertRelationship(relationship);
+                    return StatusCode(201);
                 }
+                return StatusCode(400);
             }
             catch(Exception ex)
             {
@@ -48,28 +50,31 @@ namespace sportex.api.web.Controllers
         
         // PUT: api/Relationship/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]string value)
         {
+            return StatusCode(403);
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            return StatusCode(403);
         }
 
         [HttpPost]
         [Route("SendFriendRequest")]
-        public string SendFriendRequest([FromBody]FriendRequest request)
+        public IActionResult SendFriendRequest([FromBody]FriendRequest request)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     RelationshipManager rm = new RelationshipManager();
-                    return rm.SendFriendRequest(request.idSends, request.idReceives);
+                    rm.SendFriendRequest(request.idSends, request.idReceives);
+                    return StatusCode(200);
                 }
-                return "Los datos ingresados no son correctos";
+                return StatusCode(400);
             }
             catch (Exception ex)
             {
@@ -79,16 +84,17 @@ namespace sportex.api.web.Controllers
 
         [HttpPost]
         [Route("AcceptFriendRequest")]
-        public string AcceptFriendRequest([FromBody]FriendRequest request)
+        public IActionResult AcceptFriendRequest([FromBody]FriendRequest request)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     RelationshipManager rm = new RelationshipManager();
-                    return rm.AcceptFriendRequest(request.idSends, request.idReceives);
+                    rm.AcceptFriendRequest(request.idSends, request.idReceives);
+                    return StatusCode(200);
                 }
-                return "Los datos ingresados no son correctos";
+                return StatusCode(400);
             }
             catch (Exception ex)
             {

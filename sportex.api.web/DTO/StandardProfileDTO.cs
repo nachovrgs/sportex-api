@@ -58,7 +58,7 @@ namespace sportex.api.web.DTO
         {
             try
             {
-                return new StandardProfile(this.AccountID, null, this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex);
+                return new StandardProfile(this.AccountID, this.Account.MapFromDTO(), this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex);
             }
             catch (Exception ex)
             {
