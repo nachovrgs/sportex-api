@@ -59,32 +59,6 @@ namespace sportex.api.web.Controllers
             }
         }
 
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]AccountDTO accountDTO)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (accountDTO != null)
-                    {
-                        Account account = accountDTO.MapFromDTO();
-                        AccountManager am = new AccountManager();
-                        am.InsertAccount(account);
-                    }
-                }
-                else
-                {
-                    //error
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)

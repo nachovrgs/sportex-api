@@ -60,7 +60,7 @@ namespace sportex.api.web.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]StandardProfileDTO profileDTO)
+        public IActionResult Post([FromBody]StandardProfileDTO profileDTO)
         {
             try
             {
@@ -71,11 +71,13 @@ namespace sportex.api.web.Controllers
                         StandardProfile profile = profileDTO.MapFromDTO();
                         StandardProfileManager spm = new StandardProfileManager();
                         spm.InsertProfile(profile);
+                        return StatusCode(201);
                     }
+                    return StatusCode(400);
                 }
                 else
                 {
-                    //error
+                    return StatusCode(400);
                 }
             }
             catch (Exception ex)
@@ -86,14 +88,16 @@ namespace sportex.api.web.Controllers
 
         // PUT: api/StandardProfile/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]string value)
         {
+            return StatusCode(403);
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            return StatusCode(403);
         }
     }
 }
