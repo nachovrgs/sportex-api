@@ -23,6 +23,8 @@ namespace sportex.api.web.DTO
         public int MaxSubs { get; set; }
         public int CountStarters { get; set; }
         public int CountSubs { get; set; }
+        public List<EventParticipantDTO> ListStarters { get; set; }
+        public List<EventParticipantDTO> ListSubstitutes { get; set; }
 
         #endregion
 
@@ -42,14 +44,10 @@ namespace sportex.api.web.DTO
                 this.LocationID = 0;
                 this.Location = null;
                 this.IsPublic = false;
-
-                //para produccion
-                //this.MaxStarters = 10;
-                //this.MaxSubs = 10;
-
-                //para testing
-                this.MaxStarters = 3;
-                this.MaxSubs = 3;
+                this.MaxStarters = 10;
+                this.MaxSubs = 10;
+                this.ListStarters = new List<EventParticipantDTO>();
+                this.ListSubstitutes = new List<EventParticipantDTO>();
             }
             catch (Exception ex)
             {
@@ -74,6 +72,8 @@ namespace sportex.api.web.DTO
                 this.IsPublic = eve.IsPublic;
                 this.MaxStarters = eve.MaxStarters;
                 this.MaxSubs = eve.MaxSubs;
+                this.ListStarters = new List<EventParticipantDTO>();
+                this.ListSubstitutes = new List<EventParticipantDTO>();
             }
             catch (Exception ex)
             {

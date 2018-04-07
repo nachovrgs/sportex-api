@@ -46,7 +46,10 @@ namespace sportex.api.web.Controllers
                 Event eve = em.GetEventById(id);
                 if (eve != null)
                 {
-                    return new EventDTO(eve);
+                    EventDTO dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    return dto;
                 }
                 else
                 {
@@ -136,6 +139,27 @@ namespace sportex.api.web.Controllers
                 return StatusCode(400);
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void LoadStartersAndSubs(EventDTO dto, EventManager em)
+        {
+            try
+            {
+                List<EventParticipant> participants = em.GetParticipantsWithType(dto.ID, EventParticipant.ParticipationType.Starting);
+                foreach (EventParticipant participant in participants)
+                {
+                    dto.ListStarters.Add(new EventParticipantDTO(participant));
+                }
+                participants = em.GetParticipantsWithType(dto.ID, EventParticipant.ParticipationType.Substitute);
+                foreach (EventParticipant participant in participants)
+                {
+                    dto.ListSubstitutes.Add(new EventParticipantDTO(participant));
+                }
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

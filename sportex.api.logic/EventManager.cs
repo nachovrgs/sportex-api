@@ -43,30 +43,6 @@ namespace sportex.api.logic
             }
         }
 
-        public List<EventParticipant> GetParticipants(int idEvent)
-        {
-            try
-            {
-                return repoParticipants.SearchFor(p => p.EventID == idEvent);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public List<EventParticipant> GetParticipantsWithType(int idEvent, EventParticipant.ParticipationType type)
-        {
-            try
-            {
-                return repoParticipants.SearchFor(p => p.EventID == idEvent && p.Type == (int)type);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public Event GetEventById(int id)
         {
             try
@@ -292,11 +268,11 @@ namespace sportex.api.logic
             }
         }
 
-        public EventParticipant GetFirstSubstitute(int eventId)
+        public EventParticipant GetFirstSubstitute(int idEvent)
         {
             try
             {
-                return repoParticipants.SearchFor(p => p.EventID == eventId && p.Type == (int)EventParticipant.ParticipationType.Substitute && p.Order == 1).FirstOrDefault<EventParticipant>();
+                return repoParticipants.SearchFor(p => p.EventID == idEvent && p.Type == (int)EventParticipant.ParticipationType.Substitute && p.Order == 1).FirstOrDefault<EventParticipant>();
             }
             catch (Exception ex)
             {
@@ -304,5 +280,82 @@ namespace sportex.api.logic
             }
         }
 
+
+        #region PARTICIPANTS METHODS
+
+        public List<EventParticipant> GetParticipants(int idEvent)
+        {
+            try
+            {
+                List<EventParticipant> participants = repoParticipants.SearchFor(p => p.EventID == idEvent);
+                StandardProfileManager spm = new StandardProfileManager();
+                foreach (EventParticipant participant in participants)
+                {
+                    participant.ProfileParticipant = spm.GetProfileById(participant.StandardProfileID);
+                }
+                return participants;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<EventParticipant> GetParticipantsWithType(int idEvent, EventParticipant.ParticipationType type)
+        {
+            try
+            {
+                List<EventParticipant> participants = repoParticipants.SearchFor(p => p.EventID == idEvent && p.Type == (int)type);
+                StandardProfileManager spm = new StandardProfileManager();
+                foreach(EventParticipant participant in participants)
+                {
+                    participant.ProfileParticipant = spm.GetProfileById(participant.StandardProfileID);
+                }
+                return participants;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<StandardProfile> GetStartersProfiles(int idEvent)
+        {
+            try
+            {
+                List<StandardProfile> starters = new List<StandardProfile>();
+                List<EventParticipant> participants = GetParticipantsWithType(idEvent, EventParticipant.ParticipationType.Starting);
+                StandardProfileManager spm = new StandardProfileManager();
+                foreach(EventParticipant participant in participants)
+                {
+                    starters.Add(spm.GetProfileById(participant.StandardProfileID));
+                }
+                return starters;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<StandardProfile> GetSubstitutesProfiles(int idEvent)
+        {
+            try
+            {
+                List<StandardProfile> subs = new List<StandardProfile>();
+                List<EventParticipant> participants = GetParticipantsWithType(idEvent, EventParticipant.ParticipationType.Substitute);
+                StandardProfileManager spm = new StandardProfileManager();
+                foreach (EventParticipant participant in participants)
+                {
+                    subs.Add(spm.GetProfileById(participant.StandardProfileID));
+                }
+                return subs;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
     }
 }
