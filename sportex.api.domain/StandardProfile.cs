@@ -11,12 +11,20 @@ namespace sportex.api.domain
 
         public DateTime DateOfBirth { get; set; }
         public int Sex { get; set; }
+
+        #region MAPPING
         [InverseProperty("Profile1")]
         public ICollection<Relationship> Relationships1 { get; set; }
         [InverseProperty("Profile2")]
         public ICollection<Relationship> Relationships2 { get; set; }
         [InverseProperty("ProfileParticipant")]
         public ICollection<EventParticipant> ProfileParticipant { get; set; }
+        [InverseProperty("ProfileInvites")]
+        public ICollection<EventInvitation> ProfileInvites { get; set; }
+        [InverseProperty("ProfileInvited")]
+        public ICollection<EventInvitation> ProfileInvited { get; set; }
+
+        #endregion
 
 
         #endregion

@@ -29,8 +29,13 @@ namespace sportex.api.domain
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastUpdate { get; set; }
+
+        #region MAPPING
         [InverseProperty("EventParticipates")]
         public ICollection<EventParticipant> EventParticipates { get; set; }
+        [InverseProperty("EventInvited")]
+        public ICollection<EventInvitation> EventInvited { get; set; }
+        #endregion
 
         #endregion
 

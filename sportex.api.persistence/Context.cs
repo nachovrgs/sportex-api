@@ -44,6 +44,12 @@ namespace sportex.api.persistence
                 modelBuilder.Entity<EventParticipant>().HasKey(ep => new { ep.EventID, ep.StandardProfileID });
                 modelBuilder.Entity<EventParticipant>().HasOne(x => x.EventParticipates).WithMany(y => y.EventParticipates).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<EventParticipant>().HasOne(x => x.ProfileParticipant).WithMany(y => y.ProfileParticipant).HasForeignKey(x => x.StandardProfileID);
+
+                //for EventInvitations
+                modelBuilder.Entity<EventInvitation>().HasKey(ei => new { ei.EventID, ei.IdProfileInvites,  ei.ProfileInvited});
+                modelBuilder.Entity<EventInvitation>().HasOne(x => x.EventInvited).WithMany(y => y.EventInvited).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvites).WithMany(y => y.ProfileInvites).HasForeignKey(x => x.IdProfileInvites);
+                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvited).WithMany(y => y.ProfileInvited).HasForeignKey(x => x.IdProfileInvited);
             }
             catch (Exception ex)
             {
