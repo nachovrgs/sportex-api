@@ -28,9 +28,9 @@ namespace sportex.api.logic
                 events = repoEvents.GetAll();
 
                 //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
+                StandardProfileManager spm = new StandardProfileManager();
                 foreach (Event eve in events)
-                {
-                    StandardProfileManager spm = new StandardProfileManager();
+                {   
                     eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
                     //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
                 }

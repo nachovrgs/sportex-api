@@ -65,5 +65,6 @@ namespace sportex.api.persistence
         public DbSet<Event> Events { get; set; }
         public DbSet<EventParticipant> EventParticipants { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<EventInvitation> EventInvitations { get; set; }
     }
 }
