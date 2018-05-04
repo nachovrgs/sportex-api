@@ -99,6 +99,26 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("AcceptEventInvitation")]
+        public IActionResult AcceptEventInvitation([FromBody]EventInvitationRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EventInvitationManager eim = new EventInvitationManager();
+                    string result = eim.AcceptEventInvitation(request.idEvent, request.idProfileReceived, request.idProfileSent);
+                    return StatusCode(200);
+                }
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         // PUT: api/EventInvitation/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
@@ -110,5 +130,12 @@ namespace sportex.api.web.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class EventInvitationRequest
+    {
+        public int idProfileReceived { get; set; }
+        public int idProfileSent { get; set; }
+        public int idEvent { get; set; }
     }
 }
