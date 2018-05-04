@@ -37,6 +37,9 @@ namespace sportex.api.domain
             this.Sex = sex;
             Relationships1 = new List<Relationship>();
             Relationships2 = new List<Relationship>();
+            ProfileParticipant = new List<EventParticipant>();
+            ProfileInvites = new List<EventInvitation>();
+            ProfileInvited = new List<EventInvitation>();
         }
 
         public StandardProfile() : base()
@@ -45,6 +48,9 @@ namespace sportex.api.domain
             this.Sex = 1;
             Relationships1 = new List<Relationship>();
             Relationships2 = new List<Relationship>();
+            ProfileParticipant = new List<EventParticipant>();
+            ProfileInvites = new List<EventInvitation>();
+            ProfileInvited = new List<EventInvitation>();
         }
 
         #endregion

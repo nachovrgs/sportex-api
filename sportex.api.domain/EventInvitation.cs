@@ -42,12 +42,27 @@ namespace sportex.api.domain
             this.LastUpdate = this.CreatedOn;
         }
 
-        public EventInvitation(InvitationType type, string msg, int idInvites, int idIvited, int eventId)
+        public EventInvitation(InvitationType type, string msg, int idInvites, int idInvited, int eventId)
         {
             this.Type = (int)type;
             this.Message = msg;
             this.IdProfileInvites = idInvites;
-            this.IdProfileInvited = IdProfileInvited;
+            this.IdProfileInvited = idInvited;
+            this.ProfileInvites = null;
+            this.ProfileInvited = null;
+            this.EventID = eventId;
+            this.EventInvited = null;
+            this.Status = 1;
+            this.CreatedOn = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
+        }
+
+        public EventInvitation(int type, string msg, int idInvites, int idInvited, int eventId)
+        {
+            this.Type = type;
+            this.Message = msg;
+            this.IdProfileInvites = idInvites;
+            this.IdProfileInvited = idInvited;
             this.ProfileInvites = null;
             this.ProfileInvited = null;
             this.EventID = eventId;

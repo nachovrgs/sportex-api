@@ -356,6 +356,19 @@ namespace sportex.api.logic
             }
         }
 
+        public bool ProfileIsParticipating(int idEvent, int idProfile)
+        {
+            try
+            {
+                EventParticipant participant = repoParticipants.SearchFor(p => p.EventID == idEvent && p.StandardProfileID == idProfile && p.Type > 0).FirstOrDefault<EventParticipant>();
+                return participant != null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
     }
 }

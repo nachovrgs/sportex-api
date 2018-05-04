@@ -2,6 +2,7 @@
 using sportex.api.persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace sportex.api.logic
@@ -85,6 +86,59 @@ namespace sportex.api.logic
         }
         #endregion
 
+        public void InsertEventInvitation(EventInvitation inv)
+        {
+            try
+            {
+                inv.Status = 1;
+                inv.CreatedOn = DateTime.Now;
+                inv.LastUpdate = inv.CreatedOn;
+                repoInvitations.Insert(inv);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region ACCEPT EVENT INVITATION
+        public string AcceptEventInvitation(int idEvent, int idProfileAccepts, int idProfileSent)
+        {
+            try
+            {
+
+                /*
+                IRepository<StandardProfile> profileRepo = new Repository<StandardProfile>();
+                IRepository<Event> eventRepo = new Repository<Event>();
+                StandardProfile sends = profileRepo.GetById(idProfileAccepts);
+                StandardProfile receives = profileRepo.GetById(idProfileSent);
+                Event eve = eventRepo.GetById(idEvent);
+                if (sends != null && receives != null && eve !=null)
+                {
+                */
+
+                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvites == idProfileSent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
+                if (invitation != null)
+                {
+                    //Existe una invitacion
+                    //Chequear si el jugador ya ingreso al evento
+                    EventManager em = new EventManager();
+                    if(!em.ProfileIsParticipating(idEvent, idProfileAccepts))
+                    {
+                        //El usuario no esta participando, se une
+                        em.JoinEvent(idProfileAccepts, idEvent);
+                        return "Se ha ingresado al evento";
+                    }
+                    return "El usuario ya habia ingresado al evento";
+                }
+                return "Los datos ingresados no son correctos";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
 
     }
 }

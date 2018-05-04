@@ -46,16 +46,16 @@ namespace sportex.api.persistence
                 modelBuilder.Entity<EventParticipant>().HasOne(x => x.ProfileParticipant).WithMany(y => y.ProfileParticipant).HasForeignKey(x => x.StandardProfileID);
 
                 //for EventInvitations
-                modelBuilder.Entity<EventInvitation>().HasKey(ei => new { ei.EventID, ei.IdProfileInvites,  ei.ProfileInvited});
+                modelBuilder.Entity<EventInvitation>().HasKey(ei => new { ei.EventID, ei.IdProfileInvites, ei.IdProfileInvited });
                 modelBuilder.Entity<EventInvitation>().HasOne(x => x.EventInvited).WithMany(y => y.EventInvited).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
-                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvites).WithMany(y => y.ProfileInvites).HasForeignKey(x => x.IdProfileInvites);
-                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvited).WithMany(y => y.ProfileInvited).HasForeignKey(x => x.IdProfileInvited);
+                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvites).WithMany(y => y.ProfileInvites).HasForeignKey(x => x.IdProfileInvites).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvited).WithMany(y => y.ProfileInvited).HasForeignKey(x => x.IdProfileInvited).OnDelete(DeleteBehavior.Restrict);
             }
             catch (Exception ex)
             {
                 throw new Exception("Error en la conexión con la base de datos: " + ex.Message);
-    }
-}
+            }
+        }
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AdminProfile> AdminProfiles { get; set; }
