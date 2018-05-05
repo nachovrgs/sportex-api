@@ -105,22 +105,12 @@ namespace sportex.api.logic
         }
 
         #region ACCEPT EVENT INVITATION
-        public string AcceptEventInvitation(int idEvent, int idProfileAccepts, int idProfileSent)
+        public string AcceptEventInvitation(int idEvent, int idProfileAccepts)
         {
             try
             {
-
-                /*
-                IRepository<StandardProfile> profileRepo = new Repository<StandardProfile>();
-                IRepository<Event> eventRepo = new Repository<Event>();
-                StandardProfile sends = profileRepo.GetById(idProfileAccepts);
-                StandardProfile receives = profileRepo.GetById(idProfileSent);
-                Event eve = eventRepo.GetById(idEvent);
-                if (sends != null && receives != null && eve !=null)
-                {
-                */
-
-                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvites == idProfileSent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
+                //EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvites == idProfileSent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
+                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
                 if (invitation != null)
                 {
                     //Existe una invitacion
@@ -142,6 +132,38 @@ namespace sportex.api.logic
             }
         }
         #endregion
+
+
+        public void InviteWholeGroup(int idEvent, int idGroup)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                GroupManager gm = new GroupManager();
+                Event eve = em.GetEventById(idEvent);
+                Group grp = gm.GetGroupById(idGroup);
+                if (eve != null && grp != null)
+                {
+                    EventInvitation invitation;
+                    List<GroupMember> members = gm.GetMembers(idGroup);
+                    foreach (GroupMember member in members)
+                    {
+                        invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvited == member.StandardProfileID).FirstOrDefault<EventInvitation>();
+                        if (invitation == null)
+                        {
+                            //No tenia invitacion, se crea una nueva
+                            string invitationMessage = "Fuiste invitado al evento " + eve.EventName + " por " + eve.CreatorProfile.FullName();
+                            invitation = new EventInvitation(EventInvitation.InvitationType.Default, invitationMessage, eve.StandardProfileID, member.StandardProfileID, eve.ID);
+                            InsertEventInvitation(invitation);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

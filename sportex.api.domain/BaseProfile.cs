@@ -63,5 +63,10 @@ namespace sportex.api.domain
         }
 
         #endregion
+
+        public string FullName()
+        {
+            return this.FirstName + " " + this.LastName;
+        }
     }
 }

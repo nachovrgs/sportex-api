@@ -108,7 +108,27 @@ namespace sportex.api.web.Controllers
                 if (ModelState.IsValid)
                 {
                     EventInvitationManager eim = new EventInvitationManager();
-                    string result = eim.AcceptEventInvitation(request.idEvent, request.idProfileReceived, request.idProfileSent);
+                    string result = eim.AcceptEventInvitation(request.idEvent, request.idProfileReceived);
+                    return StatusCode(200);
+                }
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        [Route("InviteWholeGroup")]
+        public IActionResult InviteWholeGroup([FromBody]EventInvitationRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EventInvitationManager eim = new EventInvitationManager();
+                    eim.InviteWholeGroup(request.idEvent, request.idGroup);
                     return StatusCode(200);
                 }
                 return StatusCode(400);
@@ -137,5 +157,6 @@ namespace sportex.api.web.Controllers
         public int idProfileReceived { get; set; }
         public int idProfileSent { get; set; }
         public int idEvent { get; set; }
+        public int idGroup { get; set; }
     }
 }
