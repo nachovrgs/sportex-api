@@ -50,8 +50,11 @@ namespace sportex.api.logic
                 Event eve = repoEvents.GetById(id);
                 //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
                 //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
-                StandardProfileManager spm = new StandardProfileManager();
-                eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                if (eve != null)
+                {
+                    StandardProfileManager spm = new StandardProfileManager();
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                }
                 return eve;
             }
             catch (Exception ex)

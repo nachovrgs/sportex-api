@@ -50,6 +50,11 @@ namespace sportex.api.persistence
                 modelBuilder.Entity<EventInvitation>().HasOne(x => x.EventInvited).WithMany(y => y.EventInvited).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvites).WithMany(y => y.ProfileInvites).HasForeignKey(x => x.IdProfileInvites).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<EventInvitation>().HasOne(x => x.ProfileInvited).WithMany(y => y.ProfileInvited).HasForeignKey(x => x.IdProfileInvited).OnDelete(DeleteBehavior.Restrict);
+
+                //for GroupMembers
+                modelBuilder.Entity<GroupMember>().HasKey(gm => new { gm.GroupID, gm.StandardProfileID });
+                modelBuilder.Entity<GroupMember>().HasOne(x => x.GroupIntegrates).WithMany(y => y.GroupIntegrates).HasForeignKey(x => x.GroupID).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<GroupMember>().HasOne(x => x.ProfileMember).WithMany(y => y.ProfileMember).HasForeignKey(x => x.StandardProfileID);
             }
             catch (Exception ex)
             {
@@ -66,5 +71,7 @@ namespace sportex.api.persistence
         public DbSet<EventParticipant> EventParticipants { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<EventInvitation> EventInvitations { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }
     }
 }

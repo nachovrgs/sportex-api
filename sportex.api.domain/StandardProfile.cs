@@ -23,6 +23,8 @@ namespace sportex.api.domain
         public ICollection<EventInvitation> ProfileInvites { get; set; }
         [InverseProperty("ProfileInvited")]
         public ICollection<EventInvitation> ProfileInvited { get; set; }
+        [InverseProperty("ProfileMember")]
+        public ICollection<GroupMember> ProfileMember { get; set; }
 
         #endregion
 

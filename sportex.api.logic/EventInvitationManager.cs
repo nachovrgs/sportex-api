@@ -72,11 +72,14 @@ namespace sportex.api.logic
             {
                 EventInvitation invitation = repoInvitations.GetById(id);
 
-                StandardProfileManager spm = new StandardProfileManager();
-                EventManager em = new EventManager();
-                invitation.ProfileInvites = spm.GetProfileById(invitation.IdProfileInvites);
-                invitation.ProfileInvited = spm.GetProfileById(invitation.IdProfileInvited);
-                invitation.EventInvited = em.GetEventById(invitation.EventID);
+                if (invitation != null)
+                {
+                    StandardProfileManager spm = new StandardProfileManager();
+                    EventManager em = new EventManager();
+                    invitation.ProfileInvites = spm.GetProfileById(invitation.IdProfileInvites);
+                    invitation.ProfileInvited = spm.GetProfileById(invitation.IdProfileInvited);
+                    invitation.EventInvited = em.GetEventById(invitation.EventID);
+                }
                 return invitation;
             }
             catch (Exception ex)

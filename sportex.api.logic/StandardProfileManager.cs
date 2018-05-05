@@ -42,8 +42,11 @@ namespace sportex.api.logic
                 StandardProfile profile = repo.GetById(id);
                 //IRepository<Account> repoAccount = new Repository<Account>();
                 //profile.Account = repoAccount.GetById(profile.AccountID);
-                AccountManager am = new AccountManager();
-                profile.Account = am.GetAccountById(profile.AccountID);
+                if (profile != null)
+                {
+                    AccountManager am = new AccountManager();
+                    profile.Account = am.GetAccountById(profile.AccountID);
+                }
                 return profile;
             }
             catch (Exception ex)
