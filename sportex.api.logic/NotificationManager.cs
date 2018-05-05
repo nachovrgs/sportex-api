@@ -47,5 +47,18 @@ namespace sportex.api.logic
             }
         }
 
+        public void GenerateNotification(string message, NotificationStatus status, NotificationType type, int idProfile)
+        {
+            try
+            {
+                Notification newnot = new Notification(idProfile, status, type, message);
+                InsertNotification(newnot);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

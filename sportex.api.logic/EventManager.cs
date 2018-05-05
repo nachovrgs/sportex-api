@@ -1,4 +1,5 @@
 ﻿using sportex.api.domain;
+using sportex.api.domain.notification;
 using sportex.api.persistence;
 using System;
 using System.Collections.Generic;
@@ -155,24 +156,35 @@ namespace sportex.api.logic
                 if (eve.FullSubs()) return "El evento " + eve.EventName + " ya llegó a su máxima capacidad de participantes.";
                 else
                 {
+                    string resultMessage;
                     if (eve.FullStarters())
                     {
-                        //Ingresa como suplente
+                        //Ingresa como suplente                      
+                        resultMessage = profile.FullName() + " ha ingresado al evento " + eve.EventName + " como suplente.";
+
+                        //Notifica a todos los participantes del evento (se realiza antes de actualizar el evento en la BD)
+                        NotifyAllParticipants(resultMessage, NotificationStatus.NEW, NotificationType.EVENT_PARTICIPANT_JOINED, eve.ID);
+
                         EventParticipant newParticipant = new EventParticipant(profile.ID, eve.ID, EventParticipant.ParticipationType.Substitute, eve.CountSubs + 1);
                         InsertParticipant(newParticipant);
                         eve.CountSubs += 1;
                         UpdateEvent(eve);
-                        return profile.FirstName + " " + profile.LastName + " ha ingresado al evento " + eve.EventName + " como suplente.";
                     }
                     else
                     {
                         //Ingresa como titular
+                        resultMessage = profile.FullName() + " ha ingresado al evento " + eve.EventName + " como titular.";
+
+                        //Notifica a todos los participantes del evento (se realiza antes de actualizar el evento en la BD)
+                        NotifyAllParticipants(resultMessage, NotificationStatus.NEW, NotificationType.EVENT_PARTICIPANT_JOINED, eve.ID);
+
                         EventParticipant newParticipant = new EventParticipant(profile.ID, eve.ID, EventParticipant.ParticipationType.Starting, eve.CountStarters + 1);
                         InsertParticipant(newParticipant);
                         eve.CountStarters += 1;
                         UpdateEvent(eve);
-                        return profile.FirstName + " " + profile.LastName + " ha ingresado al evento " + eve.EventName + " como titular.";
                     }
+
+                    return resultMessage;
                 }
             }
             catch (Exception ex)
@@ -212,6 +224,7 @@ namespace sportex.api.logic
                 {
                     //Quito al participante del evento
                     repoParticipants.Delete(participant);
+                    string resultMessage;
                     if (participant.Type == (int)EventParticipant.ParticipationType.Substitute)
                     {
                         //Era suplente
@@ -234,7 +247,10 @@ namespace sportex.api.logic
                             UpdateParticipant(firstSub);
                             eve.CountSubs -= 1;
                             UpdateEvent(eve);
-                            //NOTIFICAR AL PRIMER SUPLENTE
+
+                            //Notifica al primer suplente
+                            resultMessage = "¡Buenas noticias! Ahora estás dentro de la cancha en el evento " + eve.EventName + ".";
+                            GenerateNotification(resultMessage, NotificationStatus.NEW, NotificationType.PLAYER_STARTER, firstSub.StandardProfileID);
                         }
                         else
                         {
@@ -243,8 +259,11 @@ namespace sportex.api.logic
                             UpdateEvent(eve);
                         }
                     }
-                    //NOTIFICAR AL EVENTO
-                    return profile.FirstName + " " + profile.LastName + " se ha salido del evento " + eve.EventName + ".";
+                    //Notifica a todos los participantes del evento
+                    resultMessage = profile.FullName() + " ha dejado el evento" + eve.EventName + ".";
+                    NotifyAllParticipants(resultMessage, NotificationStatus.NEW, NotificationType.EVENT_PARTICIPANT_DROPED, eve.ID);
+
+                    return resultMessage;
                 }                
             }
             catch (Exception ex)
@@ -373,5 +392,39 @@ namespace sportex.api.logic
         }
 
         #endregion
+
+        #region NOTIFICATIONS
+
+        public void GenerateNotification(string message, NotificationStatus status, NotificationType type, int idProfile)
+        {
+            try
+            {
+                NotificationManager nm = new NotificationManager();
+                nm.GenerateNotification(message, status, type, idProfile);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void NotifyAllParticipants(string message, NotificationStatus status, NotificationType type, int idEvent)
+        {
+            try
+            {
+                List<EventParticipant> participants = GetParticipants(idEvent);
+                foreach (EventParticipant participant in participants)
+                {
+                    GenerateNotification(message, status, type, participant.StandardProfileID);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
     }
 }
