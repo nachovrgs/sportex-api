@@ -73,5 +73,6 @@ namespace sportex.api.persistence
         public DbSet<EventInvitation> EventInvitations { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<Log> Logs { get; set; }
     }
 }
