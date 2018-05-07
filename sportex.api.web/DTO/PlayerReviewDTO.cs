@@ -17,9 +17,6 @@ namespace sportex.api.web.DTO
         public StandardProfileDTO ProfileReviewed { get; set; }
         public int EventID { get; set; }
         public EventDTO EventReviewed { get; set; }
-        public int Status { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime LastUpdate { get; set; }
         #endregion
 
         #region CONSTRUCTORS
@@ -35,9 +32,6 @@ namespace sportex.api.web.DTO
                 this.ProfileReviewed = null;
                 this.EventID = 0;
                 this.EventReviewed = null;
-                this.Status = 1;
-                this.CreatedOn = DateTime.Now;
-                this.LastUpdate = this.CreatedOn;
             }
             catch (Exception ex)
             {
@@ -56,9 +50,6 @@ namespace sportex.api.web.DTO
                 this.ProfileReviewed = new StandardProfileDTO(review.ProfileReviewed);
                 this.EventID = review.EventID;
                 this.EventReviewed = new EventDTO(review.EventReviewed);
-                this.Status = 1;
-                this.CreatedOn = DateTime.Now;
-                this.LastUpdate = this.CreatedOn;
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ namespace sportex.api.domain
         [ForeignKey("IdProfileReviews")]
         public StandardProfile ProfileReviews { get; set; }
         public int IdProfileReviewed { get; set; }
-        [ForeignKey("IdProfileReviews")]
+        [ForeignKey("IdProfileReviewed")]
         public StandardProfile ProfileReviewed{ get; set; }
         public int EventID { get; set; }
         [ForeignKey("EventID")]

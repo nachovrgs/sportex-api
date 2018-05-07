@@ -25,6 +25,10 @@ namespace sportex.api.domain
         public ICollection<EventInvitation> ProfileInvited { get; set; }
         [InverseProperty("ProfileMember")]
         public ICollection<GroupMember> ProfileMember { get; set; }
+        [InverseProperty("ProfileReviews")]
+        public ICollection<PlayerReview> ProfileReviews { get; set; }
+        [InverseProperty("ProfileReviewed")]
+        public ICollection<PlayerReview> ProfileReviewed { get; set; }
 
         #endregion
 
@@ -42,6 +46,8 @@ namespace sportex.api.domain
             ProfileParticipant = new List<EventParticipant>();
             ProfileInvites = new List<EventInvitation>();
             ProfileInvited = new List<EventInvitation>();
+            ProfileReviews = new List<PlayerReview>();
+            ProfileReviewed = new List<PlayerReview>();
         }
 
         public StandardProfile() : base()
@@ -53,6 +59,8 @@ namespace sportex.api.domain
             ProfileParticipant = new List<EventParticipant>();
             ProfileInvites = new List<EventInvitation>();
             ProfileInvited = new List<EventInvitation>();
+            ProfileReviews = new List<PlayerReview>();
+            ProfileReviewed = new List<PlayerReview>();
         }
 
         #endregion
