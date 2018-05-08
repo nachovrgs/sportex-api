@@ -98,6 +98,30 @@ namespace sportex.api.logic
                 rev.CreatedOn = DateTime.Now;
                 rev.LastUpdate = rev.CreatedOn;
                 repoReviews.Insert(rev);
+
+                //Actualiza la calificacion del perfil
+                StandardProfileManager spm = new StandardProfileManager();
+                StandardProfile profile = spm.GetProfileById(rev.IdProfileReviewed);
+                if(profile!=null)
+                {
+                    spm.RateProfile(profile, rev.Rate);
+                }               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //Este metodo no actualiza al perfil ya que lo realiza en el metodo que lo llama
+        private void InsertPlayerReviewNoProfileUpdate(PlayerReview rev)
+        {
+            try
+            {
+                rev.Status = 1;
+                rev.CreatedOn = DateTime.Now;
+                rev.LastUpdate = rev.CreatedOn;
+                repoReviews.Insert(rev);
             }
             catch (Exception ex)
             {
@@ -125,7 +149,11 @@ namespace sportex.api.logic
                             {
                                 //No existia una review para ese jugador en ese evento de parte de este usuario
                                 review = new PlayerReview(rate, message, idProfileReviews, profile.ID, idEvent);
-                                InsertPlayerReview(review);
+                                InsertPlayerReviewNoProfileUpdate(review);
+
+                                //Actualiza la calificacion del perfil
+                                StandardProfileManager spm = new StandardProfileManager();
+                                spm.RateProfile(profile, rate);
 
                                 //Notificar al calificado
                                 NotificationManager nm = new NotificationManager();

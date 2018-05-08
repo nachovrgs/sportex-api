@@ -11,6 +11,9 @@ namespace sportex.api.web.DTO
         #region PROPERTIES
         public DateTime DateOfBirth { get; set; }
         public int Sex { get; set; }
+        public double TotalRate { get; set; }
+        public double CountReviews { get; set; }
+        public double AverageRating { get; set; }
 
 
         #endregion
@@ -28,6 +31,9 @@ namespace sportex.api.web.DTO
                 this.PicturePath = "";
                 this.DateOfBirth = new DateTime();
                 this.Sex = 0;
+                this.TotalRate = 0;
+                this.CountReviews = 0;
+                this.AverageRating = 0;
             }
             catch (Exception ex)
             {
@@ -47,6 +53,9 @@ namespace sportex.api.web.DTO
                 this.PicturePath = profile.PicturePath;
                 this.DateOfBirth = profile.DateOfBirth;
                 this.Sex = profile.Sex;
+                this.TotalRate = profile.TotalRate;
+                this.CountReviews = profile.CountReviews;
+                this.AverageRating = profile.AverageRating();
             }
             catch (Exception ex)
             {
@@ -58,7 +67,7 @@ namespace sportex.api.web.DTO
         {
             try
             {
-                return new StandardProfile(this.AccountID, this.Account.MapFromDTO(), this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex);
+                return new StandardProfile(this.AccountID, this.Account.MapFromDTO(), this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex, this.TotalRate, this.CountReviews);
             }
             catch (Exception ex)
             {

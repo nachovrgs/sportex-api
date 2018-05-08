@@ -11,6 +11,8 @@ namespace sportex.api.domain
 
         public DateTime DateOfBirth { get; set; }
         public int Sex { get; set; }
+        public double TotalRate { get; set; }
+        public double CountReviews { get; set; }
 
         #region MAPPING
         [InverseProperty("Profile1")]
@@ -37,10 +39,12 @@ namespace sportex.api.domain
 
         #region CONSTRUCTORS
 
-        public StandardProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic, DateTime birth, int sex) : base(idAcc, account, mail, firstn, lastn, pic)
+        public StandardProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic, DateTime birth, int sex, double rate, double reviews) : base(idAcc, account, mail, firstn, lastn, pic)
         {
             this.DateOfBirth = birth;
             this.Sex = sex;
+            this.TotalRate = rate;
+            this.CountReviews = reviews;
             Relationships1 = new List<Relationship>();
             Relationships2 = new List<Relationship>();
             ProfileParticipant = new List<EventParticipant>();
@@ -54,6 +58,8 @@ namespace sportex.api.domain
         {
             this.DateOfBirth = DateTime.Now;
             this.Sex = 1;
+            this.TotalRate = 0;
+            this.CountReviews = 0;
             Relationships1 = new List<Relationship>();
             Relationships2 = new List<Relationship>();
             ProfileParticipant = new List<EventParticipant>();
@@ -64,5 +70,10 @@ namespace sportex.api.domain
         }
 
         #endregion
+
+        public double AverageRating()
+        {
+            return CountReviews > 0 ? TotalRate / CountReviews : 0;
+        }
     }
 }
