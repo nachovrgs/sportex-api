@@ -9,34 +9,51 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using sportex.api.web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace UserAPI
 {
-    public class Startup
+    public partial class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true);
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
-            var connection = Configuration.GetConnectionString("LocalDB");
-            //services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        // The secret key every token will be signed with.
+        // In production, you should store this securely in environment variables
+        // or a key management tool. Don't hardcode this into your application!
+        private static readonly string secretKey = "mysupersecret_secretkey!123";
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
+            loggerFactory.AddConsole(LogLevel.Debug);
+            loggerFactory.AddDebug();
+
+            app.UseStaticFiles();
+
+            // Add JWT generation endpoint:
+            var signingKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(secretKey));
+            var options = new TokenProviderOptions
             {
-                app.UseDeveloperExceptionPage();
-            }
+                Audience = "Sportex",
+                Issuer = "Sportex",
+                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
+            };
+
+            app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
 
             app.UseMvc();
         }

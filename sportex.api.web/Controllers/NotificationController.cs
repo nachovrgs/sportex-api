@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.domain.notification;
@@ -10,6 +11,8 @@ namespace sportex.api.web.Controllers
     [Route("api/[controller]")]
     public class NotificationController : BaseController
     {
+
+        [Authorize]
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public IEnumerable<Notification> Get(int id)
