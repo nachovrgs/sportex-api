@@ -55,6 +55,13 @@ namespace sportex.api.persistence
                 modelBuilder.Entity<GroupMember>().HasKey(gm => new { gm.GroupID, gm.StandardProfileID });
                 modelBuilder.Entity<GroupMember>().HasOne(x => x.GroupIntegrates).WithMany(y => y.GroupIntegrates).HasForeignKey(x => x.GroupID).OnDelete(DeleteBehavior.Restrict);
                 modelBuilder.Entity<GroupMember>().HasOne(x => x.ProfileMember).WithMany(y => y.ProfileMember).HasForeignKey(x => x.StandardProfileID);
+
+                //for PlayerReviews
+                modelBuilder.Entity<PlayerReview>().HasKey(pr => new { pr.EventID, pr.IdProfileReviews, pr.IdProfileReviewed });
+                modelBuilder.Entity<PlayerReview>().HasOne(x => x.EventReviewed).WithMany(y => y.EventReviewed).HasForeignKey(x => x.EventID).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<PlayerReview>().HasOne(x => x.ProfileReviews).WithMany(y => y.ProfileReviews).HasForeignKey(x => x.IdProfileReviews).OnDelete(DeleteBehavior.Restrict);
+                modelBuilder.Entity<PlayerReview>().HasOne(x => x.ProfileReviewed).WithMany(y => y.ProfileReviewed).HasForeignKey(x => x.IdProfileReviewed).OnDelete(DeleteBehavior.Restrict);
+
             }
             catch (Exception ex)
             {
@@ -73,5 +80,7 @@ namespace sportex.api.persistence
         public DbSet<EventInvitation> EventInvitations { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<PlayerReview> PlayerReviews { get; set; }
     }
 }

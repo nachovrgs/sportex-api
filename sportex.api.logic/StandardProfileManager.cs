@@ -68,5 +68,36 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public void UpdateProfile(StandardProfile profile)
+        {
+            try
+            {
+                if (profile != null)
+                {
+                    repo.Update(profile);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void RateProfile(StandardProfile profile, int newRate)
+        {
+            try
+            {
+                if (profile != null)
+                {
+                    profile.CountReviews++;
+                    profile.TotalRate += newRate;
+                    UpdateProfile(profile);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -35,6 +35,8 @@ namespace sportex.api.domain
         public ICollection<EventParticipant> EventParticipates { get; set; }
         [InverseProperty("EventInvited")]
         public ICollection<EventInvitation> EventInvited { get; set; }
+        [InverseProperty("EventReviewed")]
+        public ICollection<PlayerReview> EventReviewed { get; set; }
         #endregion
 
         #endregion

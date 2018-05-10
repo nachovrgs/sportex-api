@@ -13,6 +13,7 @@ namespace sportex.api.domain.notification
         EVENT_CANCELATION,
         EVENT_PARTICIPANT_JOINED,
         EVENT_PARTICIPANT_DROPED,
-        PLAYER_STARTER
+        PLAYER_STARTER,
+        PLAYER_REVIEWED
     }
 }
