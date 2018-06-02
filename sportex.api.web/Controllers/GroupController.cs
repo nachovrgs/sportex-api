@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
@@ -10,6 +11,7 @@ using sportex.api.web.DTO;
 
 namespace sportex.api.web.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Group")]
     public class GroupController : BaseController

@@ -8,11 +8,10 @@ using sportex.api.logic;
 
 namespace sportex.api.web.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/notification")]
     public class NotificationController : BaseController
     {
-
-        [Authorize]
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public IEnumerable<Notification> Get(int id)
