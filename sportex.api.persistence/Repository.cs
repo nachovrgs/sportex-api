@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using sportex.api.persistance.Extensions;
 
 namespace sportex.api.persistence
 {
@@ -49,36 +49,27 @@ namespace sportex.api.persistence
             }
         }
 
-        public List<T> SearchFor(Expression<Func<T, bool>> predicate)
+        public List<T> SearchFor(Expression<Func<T, bool>> predicate, string[] includedPredicates = null)
         {
             try
             {
                 using (var dataContext = new Context())
                 {
-                    DbSet = dataContext.Set<T>();
-                    return DbSet.Where(predicate).ToList<T>();
+                    var query = dataContext.Set<T>().Where(predicate);
+                    if (includedPredicates != null && includedPredicates.Length > 0)
+                    {
+                        query = query.CustomInclude(includedPredicates);
+                    }
+                    return query.ToList<T>();
                 }
+
             }
             catch (Exception ex)
             {
                 throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
             }
         }
-        //public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
-        //{
-        //    try
-        //    {
-        //        using (var dataContext = new Context())
-        //        {
-        //            DbSet = dataContext.Set<T>();
-        //            return DbSet.Where(predicate);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
-        //    }
-        //}
+       
 
         public List<T> GetAll()
         {
@@ -128,7 +119,5 @@ namespace sportex.api.persistence
                 throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
             }
         }
-
-
     }
 }

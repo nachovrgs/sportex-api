@@ -13,10 +13,10 @@ namespace sportex.api.web.Controllers
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/Event")]
+    [Route("api/event")]
     public class EventController : BaseController
     {
-        // GET: api/Event
+        // GET: api/event
         [HttpGet]
         public IEnumerable<EventDTO> Get()
         {
@@ -24,6 +24,50 @@ namespace sportex.api.web.Controllers
             {
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetAllEvents();
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return listDTOs;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // GET: api/event/mine/profileId
+        [HttpGet("{profileId}")]
+        [Route("mine/{profileId}")]
+        public IEnumerable<EventDTO> GetMyEvents(int profileId)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventByProfileId(profileId);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return listDTOs;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // GET: api/event/mine/profileId
+        [HttpGet("{timestamp}")]
+        [Route("time/{timestamp}")]
+        public IEnumerable<EventDTO> GetEventsByDate(long timestamp)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventByTimestamp(timestamp);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 foreach (Event eve in listEvents)
                 {

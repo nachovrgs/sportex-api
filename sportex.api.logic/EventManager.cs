@@ -63,6 +63,38 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public List<Event> GetEventByProfileId(int profileId)
+        {
+            try
+            {
+                return repoEvents.SearchFor(ev => ev.StandardProfileID == profileId, new string[] {
+                    "CreatorProfile",
+                    "CreatorProfile.Account",
+                    "Location"
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Event> GetEventByTimestamp(long timestamp)
+        {
+            try
+            {
+                return repoEvents.SearchFor(ev => ev.StartingTime.HasValue && ((DateTimeOffset)ev.StartingTime.Value).ToUnixTimeSeconds() == timestamp, new string[] {
+                    "CreatorProfile",
+                    "CreatorProfile.Account",
+                    "Location"
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region INSERTS
