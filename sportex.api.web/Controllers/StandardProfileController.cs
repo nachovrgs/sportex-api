@@ -8,12 +8,12 @@ using sportex.api.web.DTO;
 
 namespace sportex.api.web.Controllers
 {
-    [Authorize]
     [Produces("application/json")]
     [Route("api/StandardProfile")]
     public class StandardProfileController : BaseController
     {
         // GET: api/<controller>
+        [Authorize]
         [HttpGet]
         public IEnumerable<StandardProfileDTO> Get()
         {
@@ -35,6 +35,7 @@ namespace sportex.api.web.Controllers
         }
 
         // GET api/<controller>/5
+        [Authorize]
         [HttpGet("{id}")]
         public StandardProfileDTO Get(int id)
         {
@@ -87,6 +88,7 @@ namespace sportex.api.web.Controllers
         }
 
         // PUT: api/StandardProfile/5
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]string value)
         {
