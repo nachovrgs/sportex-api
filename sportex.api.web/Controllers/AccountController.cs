@@ -71,6 +71,42 @@ namespace sportex.api.web.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            try
+            {
+                AccountManager am = new AccountManager();
+                am.DeleteAccount(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]AccountDTO accountDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (accountDTO != null)
+                    {
+                        Account account = accountDTO.MapFromDTO();
+                        AccountManager am = new AccountManager();
+                        am.InsertAccount(account);
+                        return StatusCode(201);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

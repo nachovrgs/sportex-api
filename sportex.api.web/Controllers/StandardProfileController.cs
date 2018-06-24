@@ -60,7 +60,8 @@ namespace sportex.api.web.Controllers
 
         // GET api/<controller>/5
         [Authorize]
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
+        [HttpGet]
         [Route("account/{id}")]
         public IActionResult GetByAccount(int id)
         {

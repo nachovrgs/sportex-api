@@ -61,5 +61,16 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public void DeleteAccount(int id)
+        {
+            try
+            {
+                repo.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
