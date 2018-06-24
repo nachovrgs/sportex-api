@@ -130,7 +130,7 @@ namespace sportex.api.logic
         #endregion
 
         #region UPDATES
-        private void UpdateEvent(Event eve)
+        public void UpdateEvent(Event eve)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace sportex.api.logic
             }
         }
 
-        private void UpdateParticipant(EventParticipant participant)
+        public void UpdateParticipant(EventParticipant participant)
         {
             try
             {
@@ -159,6 +159,21 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        #endregion
+
+        #region DELETES
+        public void DeleteEvent(int id)
+        {
+            try
+            {
+                repoEvents.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
         #endregion
 
         #region JOIN EVENT
@@ -255,7 +270,7 @@ namespace sportex.api.logic
                 else
                 {
                     //Quito al participante del evento
-                    repoParticipants.Delete(participant);
+                    repoParticipants.Delete(participant.StandardProfileID);
                     string resultMessage;
                     if (participant.Type == (int)EventParticipant.ParticipationType.Substitute)
                     {

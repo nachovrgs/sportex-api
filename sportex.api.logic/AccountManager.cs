@@ -49,11 +49,12 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
-        public Boolean ValidateAccount(String username, String password)
+        public int ValidateAccount(String username, String password)
         {
             try
             {
-                return repo.SearchFor(account => account.Username == username && account.Password == password).Count > 0;
+                Account acc = repo.SearchFor(account => account.Username == username && account.Password == password).First();
+                return acc != null ? acc.ID : 0;
             }
             catch (Exception ex)
             {

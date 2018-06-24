@@ -32,15 +32,23 @@ namespace sportex.api.persistence
             }
         }
 
-        public void Delete(T entity)
+        public void Delete(int id)
         {
             try
             {
                 using (var dataContext = new Context())
                 {
-                    DbSet = dataContext.Set<T>();
-                    DbSet.Remove(entity);
-                    dataContext.SaveChanges();
+                    T entity = GetById(id);
+                    if(entity != null)
+                    {
+                        DbSet = dataContext.Set<T>();
+                        DbSet.Remove(entity);
+                        dataContext.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new Exception("No se encontro el item con ese ID.");
+                    }
                 }
             }
             catch (Exception ex)

@@ -1,8 +1,9 @@
 ﻿using sportex.api.domain;
 using sportex.api.persistence;
-using System;
 using System.Collections.Generic;
+using System;
 using System.Text;
+using System.Linq;
 
 namespace sportex.api.logic
 {
@@ -47,6 +48,21 @@ namespace sportex.api.logic
                     AccountManager am = new AccountManager();
                     profile.Account = am.GetAccountById(profile.AccountID);
                 }
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public StandardProfile GetProfileByAccountId(int id)
+        {
+            try
+            {
+                StandardProfile profile = repo.SearchFor(prof => prof.AccountID == id, new string[] {
+                    "Account"
+                }).FirstOrDefault<StandardProfile>();
                 return profile;
             }
             catch (Exception ex)

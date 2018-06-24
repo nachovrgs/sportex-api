@@ -12,7 +12,7 @@ namespace sportex.api.web.Controllers
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/Relationship")]
+    [Route("api/relationship")]
     public class RelationshipController : BaseController
     {
         // GET: api/Relationship

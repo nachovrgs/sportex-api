@@ -13,7 +13,7 @@ namespace sportex.api.web.Controllers
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/EventInvitation")]
+    [Route("api/eventInvitation")]
     public class EventInvitationController : BaseController
     {
         [HttpGet]

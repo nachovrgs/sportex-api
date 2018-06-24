@@ -13,7 +13,7 @@ namespace sportex.api.web.Controllers
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/Group")]
+    [Route("api/group")]
     public class GroupController : BaseController
     {
         // GET: api/Group

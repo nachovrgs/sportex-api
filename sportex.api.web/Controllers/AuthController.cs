@@ -26,7 +26,8 @@ namespace sportex.api.web.Controllers
         [HttpPost]
         public IActionResult RequestToken([FromBody] TokenRequest request)
         {
-            if (validateUser(request.Username, request.Password))
+            int accountId = validateUser(request.Username, request.Password);
+            if (accountId != 0)
             {
                 var claims = new[]
                 {
@@ -47,13 +48,14 @@ namespace sportex.api.web.Controllers
                 return StatusCode(200, new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expires = token.ValidTo 
+                    expires = token.ValidTo,
+                    accountId
                 });
             }
             return BadRequest("Could not verify username and password");
         }
 
-        private Boolean validateUser(String username, String password)
+        private int validateUser(String username, String password)
         {
             AccountManager am = new AccountManager();
             return am.ValidateAccount(username, password);

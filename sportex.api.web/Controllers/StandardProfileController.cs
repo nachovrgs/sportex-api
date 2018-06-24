@@ -9,13 +9,13 @@ using sportex.api.web.DTO;
 namespace sportex.api.web.Controllers
 {
     [Produces("application/json")]
-    [Route("api/StandardProfile")]
+    [Route("api/standardProfile")]
     public class StandardProfileController : BaseController
     {
         // GET: api/<controller>
         [Authorize]
         [HttpGet]
-        public IEnumerable<StandardProfileDTO> Get()
+        public IActionResult Get()
         {
             try
             {
@@ -26,18 +26,18 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new StandardProfileDTO(profile));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500);
             }
         }
 
         // GET api/<controller>/5
         [Authorize]
         [HttpGet("{id}")]
-        public StandardProfileDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
@@ -45,17 +45,42 @@ namespace sportex.api.web.Controllers
                 StandardProfile profile = spm.GetProfileById(id);
                 if (profile != null)
                 {
-                    return new StandardProfileDTO(profile);
+                    return Ok(new StandardProfileDTO(profile));
                 }
                 else
                 {
-                    //mostrar error
-                    return null;
+                    return StatusCode(500);
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        // GET api/<controller>/5
+        [Authorize]
+        [HttpGet("{id}")]
+        [Route("account/{id}")]
+        public IActionResult GetByAccount(int id)
+        {
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                StandardProfile profile = spm.GetProfileByAccountId(id);
+                if (profile != null)
+                {
+                    return Ok(new StandardProfileDTO(profile));
+                }
+                else
+                {
+                    //Profile not found, returning a bad request.
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
             }
         }
 

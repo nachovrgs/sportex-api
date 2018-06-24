@@ -139,16 +139,47 @@ namespace sportex.api.web.Controllers
         
         // PUT: api/Event/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]EventDTO eventDTO)
         {
-            return StatusCode(403);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (eventDTO != null)
+                    {
+                        Event eve = eventDTO.MapFromDTO();
+                        EventManager em = new EventManager();
+                        em.UpdateEvent(eve);
+                        return StatusCode(200);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return StatusCode(403);
+            try
+            {
+                EventManager em = new EventManager();
+                em.DeleteEvent(id);
+                return StatusCode(200);
+                   
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]

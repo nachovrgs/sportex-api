@@ -172,7 +172,7 @@ namespace sportex.api.logic
                         else
                         {
                             //Quito al perfil del grupo
-                            repoMembers.Delete(member);
+                            repoMembers.Delete(member.StandardProfileID);
                             grp.MemberCount -= 1;
                             UpdateGroup(grp);
 
