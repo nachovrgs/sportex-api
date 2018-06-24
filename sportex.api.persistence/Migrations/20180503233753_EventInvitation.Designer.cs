@@ -12,9 +12,10 @@ using System;
 namespace sportex.api.persistance.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180503233753_EventInvitation")]
+    partial class EventInvitation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,55 +182,6 @@ namespace sportex.api.persistance.Migrations
                     b.ToTable("EventParticipants");
                 });
 
-            modelBuilder.Entity("sportex.api.domain.Group", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("GroupDescription");
-
-                    b.Property<string>("GroupName");
-
-                    b.Property<DateTime>("LastUpdate");
-
-                    b.Property<int>("MemberCount");
-
-                    b.Property<string>("PicturePath");
-
-                    b.Property<int>("StandardProfileID");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("StandardProfileID");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("sportex.api.domain.GroupMember", b =>
-                {
-                    b.Property<int>("GroupID");
-
-                    b.Property<int>("StandardProfileID");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime>("LastUpdate");
-
-                    b.Property<int>("Status");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("GroupID", "StandardProfileID");
-
-                    b.HasIndex("StandardProfileID");
-
-                    b.ToTable("GroupMembers");
-                });
-
             modelBuilder.Entity("sportex.api.domain.Location", b =>
                 {
                     b.Property<int>("ID")
@@ -250,24 +202,6 @@ namespace sportex.api.persistance.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("sportex.api.domain.Log", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("Details");
-
-                    b.Property<string>("Message");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Logs");
-                });
-
             modelBuilder.Entity("sportex.api.domain.notification.Notification", b =>
                 {
                     b.Property<int>("ID")
@@ -277,44 +211,15 @@ namespace sportex.api.persistance.Migrations
 
                     b.Property<string>("Message");
 
-                    b.Property<int>("StandardProfileID");
+                    b.Property<int?>("ProfileID");
 
                     b.Property<int>("Status");
-
-                    b.Property<int>("Type");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("StandardProfileID");
+                    b.HasIndex("ProfileID");
 
                     b.ToTable("Notifications");
-                });
-
-            modelBuilder.Entity("sportex.api.domain.PlayerReview", b =>
-                {
-                    b.Property<int>("EventID");
-
-                    b.Property<int>("IdProfileReviews");
-
-                    b.Property<int>("IdProfileReviewed");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime>("LastUpdate");
-
-                    b.Property<string>("Message");
-
-                    b.Property<int>("Rate");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("EventID", "IdProfileReviews", "IdProfileReviewed");
-
-                    b.HasIndex("IdProfileReviewed");
-
-                    b.HasIndex("IdProfileReviews");
-
-                    b.ToTable("PlayerReviews");
                 });
 
             modelBuilder.Entity("sportex.api.domain.Relationship", b =>
@@ -343,8 +248,6 @@ namespace sportex.api.persistance.Migrations
 
                     b.Property<int>("AccountID");
 
-                    b.Property<double>("CountReviews");
-
                     b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -362,8 +265,6 @@ namespace sportex.api.persistance.Migrations
                     b.Property<int>("Sex");
 
                     b.Property<int>("Status");
-
-                    b.Property<double>("TotalRate");
 
                     b.HasKey("ID");
 
@@ -431,51 +332,11 @@ namespace sportex.api.persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("sportex.api.domain.Group", b =>
-                {
-                    b.HasOne("sportex.api.domain.StandardProfile", "CreatorProfile")
-                        .WithMany()
-                        .HasForeignKey("StandardProfileID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("sportex.api.domain.GroupMember", b =>
-                {
-                    b.HasOne("sportex.api.domain.Group", "GroupIntegrates")
-                        .WithMany("GroupIntegrates")
-                        .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("sportex.api.domain.StandardProfile", "ProfileMember")
-                        .WithMany("ProfileMember")
-                        .HasForeignKey("StandardProfileID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("sportex.api.domain.notification.Notification", b =>
                 {
                     b.HasOne("sportex.api.domain.StandardProfile", "Profile")
                         .WithMany()
-                        .HasForeignKey("StandardProfileID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("sportex.api.domain.PlayerReview", b =>
-                {
-                    b.HasOne("sportex.api.domain.Event", "EventReviewed")
-                        .WithMany("EventReviewed")
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("sportex.api.domain.StandardProfile", "ProfileReviewed")
-                        .WithMany("ProfileReviewed")
-                        .HasForeignKey("IdProfileReviewed")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("sportex.api.domain.StandardProfile", "ProfileReviews")
-                        .WithMany("ProfileReviews")
-                        .HasForeignKey("IdProfileReviews")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProfileID");
                 });
 
             modelBuilder.Entity("sportex.api.domain.Relationship", b =>

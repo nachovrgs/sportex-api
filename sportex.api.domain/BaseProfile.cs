@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace sportex.api.domain
 {
-    public class BaseProfile
+    public abstract class BaseProfile
     {
         #region PROPERTIES
         [Key]
         public int ID { get; set; }
-        public int ProfileId { get; set; }
+        public int AccountID { get; set; }
+        [ForeignKey("AccountID")]
         public Account Account { get; set; }
         public string MailAddress { get; set; }
         public string FirstName { get; set; }
@@ -23,8 +25,9 @@ namespace sportex.api.domain
         #endregion
 
         #region CONSTRUCTORS
-        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
+        public BaseProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic, int stat, DateTime created, DateTime update)
         {
+            this.AccountID = idAcc;
             this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;
@@ -36,17 +39,19 @@ namespace sportex.api.domain
         }
         public BaseProfile()
         {
+            this.AccountID = 0;
             this.Account = null;
             this.MailAddress = "";
             this.FirstName = "";
             this.LastName = "";
             this.PicturePath = "";
-            this.Status = 0;
+            this.Status = 1;
             this.CreatedOn = DateTime.Now;
-            this.LastUpdate = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
         }
-        public BaseProfile(Account account, string mail, string firstn, string lastn, string pic)
+        public BaseProfile(int idAcc, Account account, string mail, string firstn, string lastn, string pic)
         {
+            this.AccountID = idAcc;
             this.Account = account;
             this.MailAddress = mail;
             this.FirstName = firstn;
@@ -54,9 +59,14 @@ namespace sportex.api.domain
             this.PicturePath = pic;
             this.Status = 1;
             this.CreatedOn = DateTime.Now;
-            this.LastUpdate = DateTime.Now;
+            this.LastUpdate = this.CreatedOn;
         }
 
         #endregion
+
+        public string FullName()
+        {
+            return this.FirstName + " " + this.LastName;
+        }
     }
 }

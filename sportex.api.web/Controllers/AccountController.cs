@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
 using sportex.api.logic;
+using sportex.api.web.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace sportex.api.web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class AccountController : BaseController
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Account> Get()
+        public IEnumerable<AccountDTO> Get()
         {
-            //return new string[] { "value1", "value2" };
             try
             {
                 AccountManager am = new AccountManager();
-                return am.GetAllAccounts();
+                List<Account> listAccounts = am.GetAllAccounts();
+                List<AccountDTO> listDTOs = new List<AccountDTO>();
+                foreach(Account account in listAccounts)
+                {
+                    listDTOs.Add(new AccountDTO(account));
+                }
+                return listDTOs;
             }
             catch(Exception ex)
             {
@@ -31,19 +39,21 @@ namespace sportex.api.web.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]Account account)
+        public AccountDTO Get(int id)
         {
             try
             {
                 AccountManager am = new AccountManager();
-                am.InsertAccount(account);
+                Account account = am.GetAccountById(id);
+                if(account!=null)
+                {
+                    return new AccountDTO(account);
+                }
+                else
+                {
+                    //mostrar error
+                    return null;
+                }
             }
             catch (Exception ex)
             {

@@ -27,6 +27,17 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public Account GetAccountById(int id)
+        {
+            try
+            {
+                return repo.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public void InsertAccount(Account account)
         {
             try
@@ -38,6 +49,17 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
-
+        public int ValidateAccount(String username, String password)
+        {
+            try
+            {
+                Account acc = repo.SearchFor(account => account.Username == username && account.Password == password).First();
+                return acc != null ? acc.ID : 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

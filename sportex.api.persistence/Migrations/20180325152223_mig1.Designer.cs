@@ -11,14 +11,14 @@ using System;
 namespace sportex.api.persistance.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180317161620_mig1")]
+    [Migration("20180325152223_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("sportex.api.domain.Account", b =>
@@ -48,7 +48,7 @@ namespace sportex.api.persistance.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccountID");
+                    b.Property<int>("AccountID");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -61,8 +61,6 @@ namespace sportex.api.persistance.Migrations
                     b.Property<string>("MailAddress");
 
                     b.Property<string>("PicturePath");
-
-                    b.Property<int>("ProfileId");
 
                     b.Property<int>("Status");
 
@@ -91,12 +89,31 @@ namespace sportex.api.persistance.Migrations
                     b.ToTable("AdminRoles");
                 });
 
+            modelBuilder.Entity("sportex.api.domain.Relationship", b =>
+                {
+                    b.Property<int>("IdProfile1");
+
+                    b.Property<int>("IdProfile2");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime>("LastUpdate");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("IdProfile1", "IdProfile2");
+
+                    b.HasIndex("IdProfile2");
+
+                    b.ToTable("Relationships");
+                });
+
             modelBuilder.Entity("sportex.api.domain.StandardProfile", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccountID");
+                    b.Property<int>("AccountID");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -111,8 +128,6 @@ namespace sportex.api.persistance.Migrations
                     b.Property<string>("MailAddress");
 
                     b.Property<string>("PicturePath");
-
-                    b.Property<int>("ProfileId");
 
                     b.Property<int>("Sex");
 
@@ -129,7 +144,8 @@ namespace sportex.api.persistance.Migrations
                 {
                     b.HasOne("sportex.api.domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountID");
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("sportex.api.domain.AdminRole", b =>
@@ -139,11 +155,25 @@ namespace sportex.api.persistance.Migrations
                         .HasForeignKey("AdminProfileID");
                 });
 
+            modelBuilder.Entity("sportex.api.domain.Relationship", b =>
+                {
+                    b.HasOne("sportex.api.domain.StandardProfile", "Profile1")
+                        .WithMany("Relationships1")
+                        .HasForeignKey("IdProfile1")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("sportex.api.domain.StandardProfile", "Profile2")
+                        .WithMany("Relationships2")
+                        .HasForeignKey("IdProfile2")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("sportex.api.domain.StandardProfile", b =>
                 {
                     b.HasOne("sportex.api.domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountID");
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

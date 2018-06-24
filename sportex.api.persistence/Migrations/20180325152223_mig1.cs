@@ -33,14 +33,13 @@ namespace sportex.api.persistance.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountID = table.Column<int>(nullable: true),
+                    AccountID = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     LastUpdate = table.Column<DateTime>(nullable: false),
                     MailAddress = table.Column<string>(nullable: true),
                     PicturePath = table.Column<string>(nullable: true),
-                    ProfileId = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -51,7 +50,7 @@ namespace sportex.api.persistance.Migrations
                         column: x => x.AccountID,
                         principalTable: "Accounts",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,7 +59,7 @@ namespace sportex.api.persistance.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountID = table.Column<int>(nullable: true),
+                    AccountID = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
@@ -68,7 +67,6 @@ namespace sportex.api.persistance.Migrations
                     LastUpdate = table.Column<DateTime>(nullable: false),
                     MailAddress = table.Column<string>(nullable: true),
                     PicturePath = table.Column<string>(nullable: true),
-                    ProfileId = table.Column<int>(nullable: false),
                     Sex = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
                 },
@@ -80,7 +78,7 @@ namespace sportex.api.persistance.Migrations
                         column: x => x.AccountID,
                         principalTable: "Accounts",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,6 +102,33 @@ namespace sportex.api.persistance.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Relationships",
+                columns: table => new
+                {
+                    IdProfile1 = table.Column<int>(nullable: false),
+                    IdProfile2 = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    LastUpdate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Relationships", x => new { x.IdProfile1, x.IdProfile2 });
+                    table.ForeignKey(
+                        name: "FK_Relationships_StandardProfiles_IdProfile1",
+                        column: x => x.IdProfile1,
+                        principalTable: "StandardProfiles",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Relationships_StandardProfiles_IdProfile2",
+                        column: x => x.IdProfile2,
+                        principalTable: "StandardProfiles",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AdminProfiles_AccountID",
                 table: "AdminProfiles",
@@ -113,6 +138,11 @@ namespace sportex.api.persistance.Migrations
                 name: "IX_AdminRoles_AdminProfileID",
                 table: "AdminRoles",
                 column: "AdminProfileID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Relationships_IdProfile2",
+                table: "Relationships",
+                column: "IdProfile2");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StandardProfiles_AccountID",
@@ -126,10 +156,13 @@ namespace sportex.api.persistance.Migrations
                 name: "AdminRoles");
 
             migrationBuilder.DropTable(
-                name: "StandardProfiles");
+                name: "Relationships");
 
             migrationBuilder.DropTable(
                 name: "AdminProfiles");
+
+            migrationBuilder.DropTable(
+                name: "StandardProfiles");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

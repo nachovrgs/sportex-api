@@ -9,9 +9,10 @@ namespace sportex.api.persistence
     public interface IRepository<T>
     {
         void Insert(T entity);
-        void Delete(T entity);
-        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
+        void Delete(int id);
+        List<T> SearchFor(Expression<Func<T, bool>> predicate, string[] includedPredicates = null);
         List<T> GetAll();
         T GetById(int id);
+        void Update(T entity);
     }
 }

@@ -8,6 +8,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+/sportex.api.persistence/appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

@@ -12,9 +12,10 @@ using System;
 namespace sportex.api.persistance.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180507205144_PlayerReview")]
+    partial class PlayerReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,8 +344,6 @@ namespace sportex.api.persistance.Migrations
 
                     b.Property<int>("AccountID");
 
-                    b.Property<double>("CountReviews");
-
                     b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -362,8 +361,6 @@ namespace sportex.api.persistance.Migrations
                     b.Property<int>("Sex");
 
                     b.Property<int>("Status");
-
-                    b.Property<double>("TotalRate");
 
                     b.HasKey("ID");
 

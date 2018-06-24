@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
 
@@ -20,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\sportex.api.domain\sportex.api.domain.csproj" />
     <ProjectReference Include="..\sportex.api.logic\sportex.api.logic.csproj" />
+    <ProjectReference Include="..\sportex.api.persistence\sportex.api.persistence.csproj" />
   </ItemGroup>
 
 </Project>
