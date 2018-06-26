@@ -98,6 +98,39 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public void UpdateProfile(StandardProfile profileUpdated, StandardProfile newData)
+        {
+            try
+            {
+                if (profileUpdated != null && newData != null)
+                {
+                    profileUpdated.FirstName = newData.FirstName;
+                    profileUpdated.LastName = newData.LastName;
+                    profileUpdated.MailAddress = newData.MailAddress;
+                    profileUpdated.PicturePath = newData.PicturePath;
+                    profileUpdated.Sex = newData.Sex;
+                    profileUpdated.Status = newData.Status;
+                    profileUpdated.AccountID = newData.AccountID;
+                    profileUpdated.LastUpdate = DateTime.Now;
+                    repo.Update(profileUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void DeleteProfile(int id)
+        {
+            try
+            {
+                repo.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public void RateProfile(StandardProfile profile, int newRate)
         {

@@ -116,16 +116,52 @@ namespace sportex.api.web.Controllers
         // PUT: api/StandardProfile/5
         [Authorize]
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]StandardProfileDTO profileDTO)
         {
-            return StatusCode(403);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    StandardProfileManager spm = new StandardProfileManager();
+                    StandardProfile profile = spm.GetProfileById(id);
+                    if (profile != null)
+                    {
+                        spm.UpdateProfile(profile, profileDTO.MapFromDTO());
+                        return Ok(profile);
+                    }
+                    else
+                    {
+                        //mostrar error
+                        return StatusCode(400);
+                    }
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return StatusCode(403);
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                spm.DeleteProfile(id);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
         }
     }
 }

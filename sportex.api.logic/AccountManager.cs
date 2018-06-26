@@ -72,5 +72,36 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public void UpdateAccount(Account account)
+        {
+            try
+            {
+                if (account != null)
+                {
+                    repo.Update(account);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void UpdateAccount(Account accountUpdated, Account newData)
+        {
+            try
+            {
+                if (accountUpdated != null && newData !=null)
+                {
+                    accountUpdated.Username = newData.Username;
+                    accountUpdated.Password = newData.Password;
+                    accountUpdated.LastUpdate = DateTime.Now;
+                    repo.Update(accountUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

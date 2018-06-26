@@ -18,7 +18,7 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<AccountDTO> Get()
+        public IActionResult Get()
         {
             try
             {
@@ -29,17 +29,18 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new AccountDTO(account));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch(Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public AccountDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
@@ -47,38 +48,68 @@ namespace sportex.api.web.Controllers
                 Account account = am.GetAccountById(id);
                 if(account!=null)
                 {
-                    return new AccountDTO(account);
+                    return Ok(new AccountDTO(account));
                 }
                 else
                 {
                     //mostrar error
-                    return null;
+                    return StatusCode(400);
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]AccountDTO accountDTO)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    AccountManager am = new AccountManager();
+                    Account account = am.GetAccountById(id);
+                    if (account != null)
+                    {
+                        am.UpdateAccount(account, accountDTO.MapFromDTO());
+                        return Ok(account);
+                    }
+                    else
+                    {
+                        //mostrar error
+                        return StatusCode(400);
+                    }
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
                 AccountManager am = new AccountManager();
                 am.DeleteAccount(id);
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -105,7 +136,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
     }
