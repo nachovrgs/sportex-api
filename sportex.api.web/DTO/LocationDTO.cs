@@ -12,6 +12,8 @@ namespace sportex.api.web.DTO
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int? Latitude { get; set; }
+        public int? Longitude { get; set; }
         #endregion
 
         public LocationDTO()
@@ -21,6 +23,8 @@ namespace sportex.api.web.DTO
                 this.ID = 0;
                 this.Name = "";
                 this.Description = "";
+                this.Latitude = null;
+                this.Longitude = null;
             }
             catch (Exception ex)
             {
@@ -35,6 +39,8 @@ namespace sportex.api.web.DTO
                 this.ID = location.ID;
                 this.Name = location.Name;
                 this.Description = location.Description;
+                this.Latitude = location.Latitude;
+                this.Longitude = location.Longitude;
             }
             catch (Exception ex)
             {
@@ -46,7 +52,7 @@ namespace sportex.api.web.DTO
         {
             try
             {
-                return new Location(this.Name, this.Description);
+                return new Location(this.Name, this.Description, this.Latitude, this.Longitude);
             }
             catch (Exception ex)
             {

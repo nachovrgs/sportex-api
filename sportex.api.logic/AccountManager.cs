@@ -94,6 +94,7 @@ namespace sportex.api.logic
                 {
                     accountUpdated.Username = newData.Username;
                     accountUpdated.Password = newData.Password;
+                    accountUpdated.Status = newData.Status;
                     accountUpdated.LastUpdate = DateTime.Now;
                     repo.Update(accountUpdated);
                 }
