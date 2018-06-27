@@ -130,12 +130,38 @@ namespace sportex.api.logic
         #endregion
 
         #region UPDATES
+        public void UpdateEvent(Event eventUpdated, Event newData)
+        {
+            try
+            {
+                if (eventUpdated != null && newData != null)
+                {
+                    eventUpdated.EventName = newData.EventName;
+                    eventUpdated.Description = newData.Description;
+                    eventUpdated.EventType = newData.EventType;
+                    eventUpdated.MaxStarters = newData.MaxStarters;
+                    eventUpdated.MaxSubs = newData.MaxSubs;
+                    eventUpdated.IsPublic = newData.IsPublic;
+                    eventUpdated.StartingTime = newData.StartingTime;
+                    eventUpdated.StandardProfileID = newData.StandardProfileID;
+                    eventUpdated.LocationID = newData.LocationID;
+                    eventUpdated.Status = newData.Status;
+                    UpdateEvent(eventUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateEvent(Event eve)
         {
             try
             {
                 if (eve != null)
                 {
+                    eve.LastUpdate = DateTime.Now;
                     repoEvents.Update(eve);
                 }
             }

@@ -146,11 +146,15 @@ namespace sportex.api.web.Controllers
                 if (ModelState.IsValid)
                 {
                     if (eventDTO != null)
-                    {
-                        Event eve = eventDTO.MapFromDTO();
+                    {                        
                         EventManager em = new EventManager();
-                        em.UpdateEvent(eve);
-                        return StatusCode(200);
+                        Event updated = em.GetEventById(id);
+                        if (updated != null)
+                        {
+                            Event eve = eventDTO.MapFromDTO();
+                            em.UpdateEvent(updated, eve);
+                            return StatusCode(200);
+                        }                       
                     }
                     return StatusCode(400);
                 }
@@ -226,12 +230,12 @@ namespace sportex.api.web.Controllers
             try
             {
                 List<EventParticipant> participants = em.GetParticipantsWithType(dto.ID, EventParticipant.ParticipationType.Starting);
-                foreach (EventParticipant participant in participants)
+                foreach (EventParticipant participant in participants.OrderBy(par=>par.Order))
                 {
                     dto.ListStarters.Add(new EventParticipantDTO(participant));
                 }
                 participants = em.GetParticipantsWithType(dto.ID, EventParticipant.ParticipationType.Substitute);
-                foreach (EventParticipant participant in participants)
+                foreach (EventParticipant participant in participants.OrderBy(par => par.Order))
                 {
                     dto.ListSubstitutes.Add(new EventParticipantDTO(participant));
                 }
