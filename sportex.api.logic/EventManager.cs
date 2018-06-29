@@ -30,10 +30,12 @@ namespace sportex.api.logic
 
                 //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
                 StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
                 foreach (Event eve in events)
                 {   
                     eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
                     //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
                 }
 
                 return events;
@@ -55,6 +57,8 @@ namespace sportex.api.logic
                 {
                     StandardProfileManager spm = new StandardProfileManager();
                     eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    LocationManager lm = new LocationManager();
+                    eve.Location = lm.GetLocationById(eve.LocationID);
                 }
                 return eve;
             }
@@ -296,7 +300,7 @@ namespace sportex.api.logic
                 else
                 {
                     //Quito al participante del evento
-                    repoParticipants.Delete(participant.StandardProfileID);
+                    repoParticipants.Delete(participant);
                     string resultMessage;
                     if (participant.Type == (int)EventParticipant.ParticipationType.Substitute)
                     {

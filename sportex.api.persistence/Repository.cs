@@ -57,6 +57,23 @@ namespace sportex.api.persistence
             }
         }
 
+        public void Delete(T entity)
+        {
+            try
+            {
+                using (var dataContext = new Context())
+                {
+                    DbSet = dataContext.Set<T>();
+                    DbSet.Remove(entity);
+                    dataContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en la conexión con la base de datos:" + ex.Message);
+            }
+        }
+
         public List<T> SearchFor(Expression<Func<T, bool>> predicate, string[] includedPredicates = null)
         {
             try

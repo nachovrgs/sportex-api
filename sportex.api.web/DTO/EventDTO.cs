@@ -68,7 +68,7 @@ namespace sportex.api.web.DTO
                 this.CountStarters = eve.CountStarters;
                 this.CountSubs = eve.CountSubs;
                 this.LocationID = eve.LocationID;
-                //this.Location = new LocationDTO(eve.Location);
+                this.Location = new LocationDTO(eve.Location);
                 this.IsPublic = eve.IsPublic;
                 this.MaxStarters = eve.MaxStarters;
                 this.MaxSubs = eve.MaxSubs;
