@@ -95,16 +95,50 @@ namespace sportex.api.web.Controllers
 
         // PUT: api/Group/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]GroupDTO groupDTO)
         {
-            return StatusCode(403);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (groupDTO != null)
+                    {
+                        GroupManager gm = new GroupManager();
+                        Group updated = gm.GetGroupById(id);
+                        if (updated != null)
+                        {
+                            Group grp = groupDTO.MapFromDTO();
+                            gm.UpdateGroup(updated, grp);
+                            return StatusCode(200);
+                        }
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return StatusCode(403);
+            try
+            {
+                GroupManager gm = new GroupManager();
+                gm.DeleteGroup(id);
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]

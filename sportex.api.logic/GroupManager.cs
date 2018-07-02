@@ -92,12 +92,34 @@ namespace sportex.api.logic
         #endregion
 
         #region UPDATES
+        public void UpdateGroup(Group groupUpdated, Group newData)
+        {
+            try
+            {
+                if (groupUpdated != null && newData != null)
+                {
+                    groupUpdated.GroupName = newData.GroupName;
+                    groupUpdated.GroupDescription = newData.GroupDescription;
+                    groupUpdated.PicturePath = newData.PicturePath;
+                    groupUpdated.MemberCount = newData.MemberCount;
+                    groupUpdated.StandardProfileID = newData.StandardProfileID;
+                    groupUpdated.Status = newData.Status;
+                    UpdateGroup(groupUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private void UpdateGroup(Group grp)
         {
             try
             {
                 if (grp != null)
                 {
+                    grp.LastUpdate = DateTime.Now;
                     repoGroups.Update(grp);
                 }
             }
@@ -121,6 +143,25 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        #endregion
+
+        #region DELETES
+        public void DeleteGroup(int id)
+        {
+            try
+            {
+                foreach (GroupMember member in GetMembers(id))
+                {
+                    repoMembers.Delete(member);
+                }
+                repoGroups.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region JOIN Group
@@ -172,7 +213,7 @@ namespace sportex.api.logic
                         else
                         {
                             //Quito al perfil del grupo
-                            repoMembers.Delete(member.StandardProfileID);
+                            repoMembers.Delete(member);
                             grp.MemberCount -= 1;
                             UpdateGroup(grp);
 

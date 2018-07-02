@@ -196,6 +196,10 @@ namespace sportex.api.logic
         {
             try
             {
+                foreach (EventParticipant participant in GetParticipants(id))
+                {
+                    repoParticipants.Delete(participant);
+                }
                 repoEvents.Delete(id);
             }
             catch (Exception ex)
