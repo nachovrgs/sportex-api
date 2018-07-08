@@ -99,6 +99,98 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public List<Event> GetEventsJoinedByProfile(int id)
+        {
+            try
+            {
+                List<Event> events = new List<Event>();
+                List<EventParticipant> participations = GetProfileParticipations(id);
+                foreach(EventParticipant participation in participations)
+                {
+                    Event eve = repoEvents.GetById(participation.EventID);
+                    if(eve.Status == 1)
+                    {
+                        events.Add(eve);
+                    }     
+                }
+                StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
+                foreach (Event eve in events)
+                {
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
+                }
+
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<EventParticipant> GetProfileParticipations(int id)
+        {
+            try
+            {
+                return repoParticipants.SearchFor(p => p.StandardProfileID == id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Event> GetAllPublicEvents()
+        {
+            try
+            {
+                List<Event> events = new List<Event>();
+                events = repoEvents.SearchFor(ev => ev.IsPublic == true && ev.Status==1);
+                StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
+                foreach (Event eve in events)
+                {
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
+                }
+
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Event> GetEventsAvaiableForProfile(int id)
+        {
+            try
+            {
+                List<Event> joinedEvents = GetEventsJoinedByProfile(id); //ESTO LO HICE MAL, ACA IRIAN LOS EVENTOS QUE TENGO INVITACION Y NO ACEPTE. DESPUES LO ARREGLO
+                List<Event> publicEvents = GetAllPublicEvents();
+                //List<Event> union = joinedEvents.Union<Event>(publicEvents).ToList();
+                //List<Event> distinct = union.GroupBy(eve => eve.ID).Select(e => e.First()).ToList();
+                //List<Event> ordered = distinct.OrderByDescending(eve => eve.StartingTime).ToList();
+                List<Event> avaiableEvents = joinedEvents.Union(publicEvents).GroupBy(eve => eve.ID).Select(e => e.First()).OrderBy(eve => eve.StartingTime).ToList();
+
+                StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
+                foreach (Event eve in avaiableEvents)
+                {
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
+                }
+
+                return avaiableEvents;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region INSERTS
@@ -189,6 +281,38 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public void OpenEventToPublic(Event eventUpdated)
+        {
+            try
+            {
+                if (eventUpdated != null)
+                {
+                    eventUpdated.IsPublic = true;
+                    UpdateEvent(eventUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void CloseEventToPublic(Event eventUpdated)
+        {
+            try
+            {
+                if (eventUpdated != null)
+                {
+                    eventUpdated.IsPublic = false;
+                    UpdateEvent(eventUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region DELETES
@@ -215,14 +339,22 @@ namespace sportex.api.logic
         {
             try
             {
-                IRepository<StandardProfile> repoProfile = new Repository<StandardProfile>();
-                StandardProfile profile = repoProfile.GetById(idProfile);
-                if (profile == null) return "No existe un perfil con ese ID";
+                EventParticipant participant = repoParticipants.SearchFor(p => p.EventID == idEvent && p.StandardProfileID == idProfile).FirstOrDefault<EventParticipant>();
+                if (participant != null)
+                {
+                    return "Ya participa del evento.";
+                }
                 else
                 {
-                    Event eve = repoEvents.GetById(idEvent);
-                    if (eve == null) return "No existe un evento con ese ID";
-                    else return JoinEvent(profile, eve);
+                    IRepository<StandardProfile> repoProfile = new Repository<StandardProfile>();
+                    StandardProfile profile = repoProfile.GetById(idProfile);
+                    if (profile == null) return "No existe un perfil con ese ID";
+                    else
+                    {
+                        Event eve = repoEvents.GetById(idEvent);
+                        if (eve == null) return "No existe un evento con ese ID";
+                        else return JoinEvent(profile, eve);
+                    }
                 }
             }
             catch (Exception ex)

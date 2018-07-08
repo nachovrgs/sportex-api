@@ -18,7 +18,7 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/event
         [HttpGet]
-        public IEnumerable<EventDTO> Get()
+        public IActionResult Get()
         {
             try
             {
@@ -29,62 +29,19 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new EventDTO(eve));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
-            }
-        }
-
-        // GET: api/event/mine/profileId
-        [HttpGet("{profileId}")]
-        [Route("mine/{profileId}")]
-        public IEnumerable<EventDTO> GetMyEvents(int profileId)
-        {
-            try
-            {
-                EventManager em = new EventManager();
-                List<Event> listEvents = em.GetEventByProfileId(profileId);
-                List<EventDTO> listDTOs = new List<EventDTO>();
-                foreach (Event eve in listEvents)
-                {
-                    listDTOs.Add(new EventDTO(eve));
-                }
-                return listDTOs;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        // GET: api/event/mine/profileId
-        [HttpGet("{timestamp}")]
-        [Route("time/{timestamp}")]
-        public IEnumerable<EventDTO> GetEventsByDate(long timestamp)
-        {
-            try
-            {
-                EventManager em = new EventManager();
-                List<Event> listEvents = em.GetEventByTimestamp(timestamp);
-                List<EventDTO> listDTOs = new List<EventDTO>();
-                foreach (Event eve in listEvents)
-                {
-                    listDTOs.Add(new EventDTO(eve));
-                }
-                return listDTOs;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         // GET: api/Event/5
         //[HttpGet("{id}", Name = "Get")]
         [HttpGet("{id}")]
-        public EventDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
@@ -95,20 +52,116 @@ namespace sportex.api.web.Controllers
                     EventDTO dto = new EventDTO(eve);
                     //cargar los starters y subtitutes
                     LoadStartersAndSubs(dto, em);
-                    return dto;
+                    return Ok(dto);
                 }
                 else
                 {
-                    //mostrar error
-                    return null;
+                    return StatusCode(400);
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
-        
+
+        // GET: api/event/time/{timestamp}
+        [HttpGet("{timestamp}")]
+        [Route("time/{timestamp}")]
+        public IActionResult GetEventsByDate(long timestamp)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventByTimestamp(timestamp);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        #region EventsForProfile
+
+        // GET: api/event/mine/profileId
+        [HttpGet("{profileId}")]
+        [Route("mine/{profileId}")]
+        public IActionResult GetMyEvents(int profileId)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventByProfileId(profileId);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        // GET: api/event/joined/profileId
+        [HttpGet("{profileId}")]
+        [Route("joined/{profileId}")]
+        public IActionResult GetEventsJoined(int profileId)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventsJoinedByProfile(profileId);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        // GET: api/event/avaiable/profileId
+        [HttpGet("{profileId}")]
+        [Route("avaiable/{profileId}")]
+        public IActionResult GetEventsAvaiable(int profileId)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetEventsAvaiableForProfile(profileId);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500); ;
+            }
+        }
+
+        #endregion
+
         // POST: api/Event
         [HttpPost]
         public IActionResult Post([FromBody]EventDTO eventDTO)
@@ -122,6 +175,7 @@ namespace sportex.api.web.Controllers
                         Event eve = eventDTO.MapFromDTO();
                         EventManager em = new EventManager();
                         em.InsertEvent(eve);
+                        em.JoinEvent(eve.StandardProfileID, eve.ID);
                         return StatusCode(200);
                     }
                     return StatusCode(400);
@@ -168,7 +222,68 @@ namespace sportex.api.web.Controllers
                 throw ex;
             }
         }
-        
+        #region OPEN AND CLOSE TO PUBLIC
+
+        // PUT: api/Event/opentopublic/5
+        [HttpPut("{id}")]
+        [Route("opentopublic/{id}")]
+        public IActionResult OpenEventToPublic(int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EventManager em = new EventManager();
+                    Event updated = em.GetEventById(id);
+                    if (updated != null)
+                    {
+                        em.OpenEventToPublic(updated);
+                        return StatusCode(200);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // PUT: api/Event/closetopublic/5
+        [HttpPut("{id}")]
+        [Route("closetopublic/{id}")]
+        public IActionResult CloseEventToPublic(int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EventManager em = new EventManager();
+                    Event updated = em.GetEventById(id);
+                    if (updated != null)
+                    {
+                        em.CloseEventToPublic(updated);
+                        return StatusCode(200);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
