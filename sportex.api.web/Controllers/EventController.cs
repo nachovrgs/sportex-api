@@ -136,7 +136,28 @@ namespace sportex.api.web.Controllers
                 return StatusCode(500);
             }
         }
-
+        // GET: api/event/joined/profileId
+        [HttpGet("{profileId}")]
+        [Route("past/{profileId}")]
+        public IActionResult GetPastEventsJoined(int profileId)
+        {
+            try
+            {
+                EventManager em = new EventManager();
+                List<Event> listEvents = em.GetPastEventsJoinedByProfile(profileId);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                foreach (Event eve in listEvents)
+                {
+                    listDTOs.Add(new EventDTO(eve));
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
         // GET: api/event/avaiable/profileId
         [HttpGet("{profileId}")]
         [Route("avaiable/{profileId}")]
