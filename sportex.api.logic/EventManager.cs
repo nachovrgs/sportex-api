@@ -129,7 +129,35 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public List<Event> GetPastEventsJoinedByProfile(int id)
+        {
+            try
+            {
+                List<Event> events = new List<Event>();
+                List<EventParticipant> participations = GetProfileParticipations(id);
+                foreach (EventParticipant participation in participations)
+                {
+                    Event eve = repoEvents.GetById(participation.EventID);
+                    if (eve.Status != 1)
+                    {
+                        events.Add(eve);
+                    }
+                }
+                StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
+                foreach (Event eve in events)
+                {
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
+                }
 
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public List<EventParticipant> GetProfileParticipations(int id)
         {
             try
