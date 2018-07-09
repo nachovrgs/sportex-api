@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
+using sportex.api.domain.EventClasses;
 using sportex.api.logic;
 using sportex.api.web.DTO;
 
@@ -110,8 +111,8 @@ namespace sportex.api.web.Controllers
                 if (ModelState.IsValid)
                 {
                     EventInvitationManager eim = new EventInvitationManager();
-                    string result = eim.AcceptEventInvitation(request.idEvent, request.idProfileReceived);
-                    return StatusCode(200);
+                    EventResult result = eim.AcceptEventInvitation(request.idEvent, request.idProfileReceived);
+                    return Ok(result);
                 }
                 return StatusCode(400);
             }

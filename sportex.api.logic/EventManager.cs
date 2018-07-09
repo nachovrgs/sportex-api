@@ -1,4 +1,5 @@
 ﻿using sportex.api.domain;
+using sportex.api.domain.EventClasses;
 using sportex.api.domain.notification;
 using sportex.api.persistence;
 using System;
@@ -106,12 +107,13 @@ namespace sportex.api.logic
             {
                 List<Event> events = new List<Event>();
                 List<EventParticipant> participations = GetProfileParticipations(id);
-                foreach(EventParticipant participation in participations)
+                Event even;
+                foreach (EventParticipant participation in participations)
                 {
-                    Event eve = repoEvents.GetById(participation.EventID);
-                    if(eve.Status == 1)
+                    even = repoEvents.GetById(participation.EventID);
+                    if(even.Status == 1)
                     {
-                        events.Add(eve);
+                        events.Add(even);
                     }     
                 }
                 StandardProfileManager spm = new StandardProfileManager();
@@ -135,6 +137,38 @@ namespace sportex.api.logic
             try
             {
                 return repoParticipants.SearchFor(p => p.StandardProfileID == id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Event> GetEventsInvited(int idProfile)
+        {
+            try
+            {
+                EventInvitationManager eim = new EventInvitationManager();
+                List<EventInvitation> invitations = eim.GetInvitationsReceived(idProfile);
+                List<Event> eventsInvited = new List<Event>();
+                Event even;
+                foreach(EventInvitation invitation in invitations)
+                {
+                    even = repoEvents.GetById(invitation.EventID);
+                    if (even.Status == 1)
+                    {
+                        eventsInvited.Add(even);
+                    }
+                }
+                StandardProfileManager spm = new StandardProfileManager();
+                LocationManager lm = new LocationManager();
+                foreach (Event eve in eventsInvited)
+                {
+                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
+                    eve.Location = lm.GetLocationById(eve.LocationID);
+                }
+
+                return eventsInvited;
             }
             catch (Exception ex)
             {
@@ -168,12 +202,12 @@ namespace sportex.api.logic
         {
             try
             {
-                List<Event> joinedEvents = GetEventsJoinedByProfile(id); //ESTO LO HICE MAL, ACA IRIAN LOS EVENTOS QUE TENGO INVITACION Y NO ACEPTE. DESPUES LO ARREGLO
+                List<Event> invitedEvents = GetEventsInvited(id);
                 List<Event> publicEvents = GetAllPublicEvents();
                 //List<Event> union = joinedEvents.Union<Event>(publicEvents).ToList();
                 //List<Event> distinct = union.GroupBy(eve => eve.ID).Select(e => e.First()).ToList();
                 //List<Event> ordered = distinct.OrderByDescending(eve => eve.StartingTime).ToList();
-                List<Event> avaiableEvents = joinedEvents.Union(publicEvents).GroupBy(eve => eve.ID).Select(e => e.First()).OrderBy(eve => eve.StartingTime).ToList();
+                List<Event> avaiableEvents = invitedEvents.Union(publicEvents).GroupBy(eve => eve.ID).Select(e => e.First()).OrderBy(eve => eve.StartingTime).ToList();
 
                 StandardProfileManager spm = new StandardProfileManager();
                 LocationManager lm = new LocationManager();
@@ -335,24 +369,24 @@ namespace sportex.api.logic
         #endregion
 
         #region JOIN EVENT
-        public string JoinEvent(int idProfile, int idEvent)
+        public EventResult JoinEvent(int idProfile, int idEvent)
         {
             try
             {
-                EventParticipant participant = repoParticipants.SearchFor(p => p.EventID == idEvent && p.StandardProfileID == idProfile).FirstOrDefault<EventParticipant>();
-                if (participant != null)
+                if (ProfileIsParticipating(idEvent, idProfile))
                 {
-                    return "Ya participa del evento.";
+                    return new EventResult(3, "Ya participa del evento.");
+                    //return "Ya participa del evento.";
                 }
                 else
                 {
                     IRepository<StandardProfile> repoProfile = new Repository<StandardProfile>();
                     StandardProfile profile = repoProfile.GetById(idProfile);
-                    if (profile == null) return "No existe un perfil con ese ID";
+                    if (profile == null) return new EventResult(3, "No existe un perfil con ese ID.");//return "No existe un perfil con ese ID.";
                     else
                     {
                         Event eve = repoEvents.GetById(idEvent);
-                        if (eve == null) return "No existe un evento con ese ID";
+                        if (eve == null) return new EventResult(3, "No existe un evento con ese ID.");//return "No existe un evento con ese ID.";
                         else return JoinEvent(profile, eve);
                     }
                 }
@@ -362,11 +396,11 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
-        public string JoinEvent(StandardProfile profile, Event eve)
+        public EventResult JoinEvent(StandardProfile profile, Event eve)
         {
             try
             {
-                if (eve.FullSubs()) return "El evento " + eve.EventName + " ya llegó a su máxima capacidad de participantes.";
+                if (eve.FullSubs()) return new EventResult(3, "El evento " + eve.EventName + " ya llegó a su máxima capacidad de participantes.");//return "El evento " + eve.EventName + " ya llegó a su máxima capacidad de participantes.";
                 else
                 {
                     string resultMessage;
@@ -397,7 +431,8 @@ namespace sportex.api.logic
                         UpdateEvent(eve);
                     }
 
-                    return resultMessage;
+                    //return resultMessage;
+                    return new EventResult(1, resultMessage);
                 }
             }
             catch (Exception ex)

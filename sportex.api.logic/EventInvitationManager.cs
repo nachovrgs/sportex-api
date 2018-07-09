@@ -1,4 +1,5 @@
 ﻿using sportex.api.domain;
+using sportex.api.domain.EventClasses;
 using sportex.api.persistence;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace sportex.api.logic
             try
             {
                 List<EventInvitation> invites = new List<EventInvitation>();
-                invites = repoInvitations.SearchFor(i => i.IdProfileInvited == idProfile);
+                invites = repoInvitations.SearchFor(i => i.IdProfileInvited == idProfile && i.Status == 1);
 
                 StandardProfileManager spm = new StandardProfileManager();
                 EventManager em = new EventManager();
@@ -47,7 +48,7 @@ namespace sportex.api.logic
             try
             {
                 List<EventInvitation> invites = new List<EventInvitation>();
-                invites = repoInvitations.SearchFor(i => i.IdProfileInvites == idProfile);
+                invites = repoInvitations.SearchFor(i => i.IdProfileInvites == idProfile && i.Status == 1);
 
                 StandardProfileManager spm = new StandardProfileManager();
                 EventManager em = new EventManager();
@@ -104,27 +105,43 @@ namespace sportex.api.logic
             }
         }
 
+        public void UpdateEventInvitation(EventInvitation invitation)
+        {
+            try
+            {
+                if (invitation != null)
+                {
+                    invitation.LastUpdate = DateTime.Now;
+                    repoInvitations.Update(invitation);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #region ACCEPT EVENT INVITATION
-        public string AcceptEventInvitation(int idEvent, int idProfileAccepts)
+        public EventResult AcceptEventInvitation(int idEvent, int idProfileAccepts)
         {
             try
             {
                 //EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvites == idProfileSent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
-                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvited == idProfileAccepts).FirstOrDefault<EventInvitation>();
+                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvited == idProfileAccepts && i.Status == 1).FirstOrDefault<EventInvitation>();
                 if (invitation != null)
                 {
                     //Existe una invitacion
-                    //Chequear si el jugador ya ingreso al evento
                     EventManager em = new EventManager();
-                    if(!em.ProfileIsParticipating(idEvent, idProfileAccepts))
+                    EventResult result = em.JoinEvent(idProfileAccepts, idEvent);
+                    if(result.ResultStatus == 1) //Se unio al evento con exito
                     {
-                        //El usuario no esta participando, se une
-                        em.JoinEvent(idProfileAccepts, idEvent);
-                        return "Se ha ingresado al evento";
+                        invitation.Status = 2; //Invitacion aceptada
+                        UpdateEventInvitation(invitation);
                     }
-                    return "El usuario ya habia ingresado al evento";
+                    return result;
                 }
-                return "Los datos ingresados no son correctos";
+                //return "Los datos ingresados no son correctos";
+                return new EventResult(3, "Los datos ingresados no son correctos");
             }
             catch (Exception ex)
             {
