@@ -12,8 +12,8 @@ namespace sportex.api.domain
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? Latitude { get; set; }
-        public int? Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastUpdate { get; set; }
@@ -21,7 +21,7 @@ namespace sportex.api.domain
         #endregion
 
         #region CONSTRUCTORS
-        public Location(string name, string desc, int? lat, int? lon)
+        public Location(string name, string desc, double? lat, double? lon)
         {
             this.Name = name;
             this.Description = desc;
