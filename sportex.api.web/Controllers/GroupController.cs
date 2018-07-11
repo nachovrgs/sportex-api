@@ -78,7 +78,9 @@ namespace sportex.api.web.Controllers
                         Group grp = GroupDTO.MapFromDTO();
                         GroupManager gm = new GroupManager();
                         gm.InsertGroup(grp);
-                        return StatusCode(200);
+                        gm.JoinGroup(grp.StandardProfileID, grp.ID);
+                        return Ok(grp.ID);
+                        //return StatusCode(200);
                     }
                     return StatusCode(400);
                 }

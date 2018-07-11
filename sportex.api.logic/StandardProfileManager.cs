@@ -70,6 +70,22 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public StandardProfile GetProfileByUsername(string username)
+        {
+            try
+            {
+                StandardProfile profile = repo.SearchFor(prof => prof.Account.Username.ToUpper() == username.ToUpper(), new string[] {
+                    "Account"
+                }).FirstOrDefault<StandardProfile>();
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void InsertProfile(StandardProfile profile)
         {
             try

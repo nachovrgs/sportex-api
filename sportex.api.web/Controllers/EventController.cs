@@ -197,7 +197,8 @@ namespace sportex.api.web.Controllers
                         EventManager em = new EventManager();
                         em.InsertEvent(eve);
                         em.JoinEvent(eve.StandardProfileID, eve.ID);
-                        return StatusCode(200);
+                        return Ok(eve.ID);
+                        //return StatusCode(200);
                     }
                     return StatusCode(400);
                 }

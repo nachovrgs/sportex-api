@@ -85,6 +85,31 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("username/{username}")]
+        public IActionResult GetByUsername(string username)
+        {
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                StandardProfile profile = spm.GetProfileByUsername(username);
+                if (profile != null)
+                {
+                    return Ok(new StandardProfileDTO(profile));
+                }
+                else
+                {
+                    //Profile not found, returning a bad request.
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
         // POST api/<controller>
         [HttpPost]
         public IActionResult Post([FromBody]StandardProfileDTO profileDTO)
