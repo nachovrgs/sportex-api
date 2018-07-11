@@ -226,24 +226,31 @@ namespace sportex.api.logic
             }
         }
 
+        public List<Event> GetAllPublicNonJoinedEvents(int idProfile)
+        {
+            try
+            {
+                List<Event> publicEvents = GetAllPublicEvents();
+                List<Event> joinedEvents = GetEventsJoinedByProfile(idProfile);
+                publicEvents.RemoveAll(a => joinedEvents.Exists(b => a.ID == b.ID));
+                return publicEvents;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Event> GetEventsAvaiableForProfile(int id)
         {
             try
             {
                 List<Event> invitedEvents = GetEventsInvited(id);
-                List<Event> publicEvents = GetAllPublicEvents();
+                List<Event> publicEvents = GetAllPublicNonJoinedEvents(id);
                 //List<Event> union = joinedEvents.Union<Event>(publicEvents).ToList();
                 //List<Event> distinct = union.GroupBy(eve => eve.ID).Select(e => e.First()).ToList();
                 //List<Event> ordered = distinct.OrderByDescending(eve => eve.StartingTime).ToList();
                 List<Event> avaiableEvents = invitedEvents.Union(publicEvents).GroupBy(eve => eve.ID).Select(e => e.First()).OrderBy(eve => eve.StartingTime).ToList();
-
-                StandardProfileManager spm = new StandardProfileManager();
-                LocationManager lm = new LocationManager();
-                foreach (Event eve in avaiableEvents)
-                {
-                    eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
-                    eve.Location = lm.GetLocationById(eve.LocationID);
-                }
 
                 return avaiableEvents;
             }
