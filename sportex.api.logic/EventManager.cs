@@ -709,5 +709,87 @@ namespace sportex.api.logic
 
         #endregion
 
+        #region DATE CONTROLS
+
+        public void EventCompleted(Event eve)
+        {
+            try
+            {
+                eve.Status = 2; //completed
+                //Send review request to participants
+                repoEvents.Update(eve);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void CheckCompletedEvents(DateTime timeChecked)
+        {
+            try
+            {
+                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => ev.StartingTime <= timeChecked && ev.Status == 1).ToList();
+                foreach(Event eve in pastTimeEvents)
+                {
+                    EventCompleted(eve);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void CheckUpcomingEvents(DateTime timeChecked)
+        {
+            try
+            {
+                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => HoursBetweenDates(timeChecked, ev.StartingTime) <= 1 && ev.Status == 1).ToList();
+                foreach (Event eve in pastTimeEvents)
+                {
+                    //notify participants
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private double HoursBetweenDates(DateTime? date1, DateTime? date2)
+        {
+            try
+            {
+                if (date1 != null && date2 != null)
+                {
+                    return ((DateTime)date1 - (DateTime)date2).TotalHours;
+                }
+                return 1000;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        public void LogTest(DateTime date)
+        {
+            try
+            {
+                Log log = new Log(9, "Log de prueba de webjob", "Se ejecuta con fecha " + date.ToShortDateString() + " " + date.ToShortTimeString());
+                IRepository<Log> repoLog = new Repository<Log>();
+                repoLog.Insert(log);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        
+
     }
 }
