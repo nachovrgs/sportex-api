@@ -52,6 +52,15 @@ namespace sportex.api.domain.notification
             this.CreatedOn = DateTime.Now;
         }
 
+        public Notification()
+        {
+            this.StandardProfileID = 0;
+            this.Profile = null;
+            this.Status = NotificationStatus.NEW;
+            this.Type = NotificationType.DEFAULT;
+            this.Message = "";
+            this.CreatedOn = DateTime.Now;
+        }
         #endregion
     }
 }

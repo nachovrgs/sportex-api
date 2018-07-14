@@ -14,12 +14,28 @@ namespace sportex.api.web.Controllers
     {
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public IEnumerable<Notification> Get(int id)
+        [Route("profilenotifications/{id}")]
+        public IEnumerable<Notification> GetAll(int id)
         {
             try
             {
                 NotificationManager notificationManager = new NotificationManager();
                 return notificationManager.GetAllNotifications(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Route("profilenotificationsunseen/{id}")]
+        public IEnumerable<Notification> GetUnseen(int id)
+        {
+            try
+            {
+                NotificationManager notificationManager = new NotificationManager();
+                return notificationManager.GetUnseenNotifications(id);
             }
             catch (Exception ex)
             {
@@ -50,9 +66,62 @@ namespace sportex.api.web.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]Notification notification)
         {
-            return StatusCode(403);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (notification != null)
+                    {
+                        NotificationManager nm = new NotificationManager();
+                        Notification updated = nm.GetNotificationById(id);
+                        if (updated != null)
+                        {
+                            nm.UpdateNotification(updated, notification);
+                            return StatusCode(200);
+                        }
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // PUT api/<controller>/5
+        [HttpPut("{id}")]
+        [Route("setseen/{id}")]
+        public IActionResult SeeNotification(int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    NotificationManager nm = new NotificationManager();
+                    Notification updated = nm.GetNotificationById(id);
+                    if (updated != null)
+                    {
+                        nm.SeenStatus(updated);
+                        return StatusCode(200);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // DELETE api/<controller>/5
