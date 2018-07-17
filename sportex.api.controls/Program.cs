@@ -12,7 +12,7 @@ namespace sportex.api.controls
                 //Console.WriteLine("Se ejecutan los controles.");
                 EventManager em = new EventManager();
                 //em.LogTest(DateTime.Now);
-                em.CheckCompletedEvents(DateTime.Now);
+                em.CheckEvents(DateTime.Now);
                 //Console.WriteLine("Controles ejecutados con éxito.");
                 //Console.Read();
             }

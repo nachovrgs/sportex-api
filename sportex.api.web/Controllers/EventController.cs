@@ -25,10 +25,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetAllEvents();
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -76,10 +84,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventByTimestamp(timestamp);
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -101,10 +117,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventByProfileId(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -124,10 +148,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventsJoinedByProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -146,10 +178,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetPastEventsJoinedByProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -168,10 +208,18 @@ namespace sportex.api.web.Controllers
                 EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventsAvaiableForProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
                 foreach (Event eve in listEvents)
                 {
-                    listDTOs.Add(new EventDTO(eve));
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
                 }
+                //foreach (Event eve in listEvents)
+                //{
+                //    listDTOs.Add(new EventDTO(eve));
+                //}
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -247,7 +295,6 @@ namespace sportex.api.web.Controllers
         #region OPEN AND CLOSE TO PUBLIC
 
         // PUT: api/Event/opentopublic/5
-        [HttpPut("{id}")]
         [Route("opentopublic/{id}")]
         public IActionResult OpenEventToPublic(int id)
         {
@@ -276,7 +323,6 @@ namespace sportex.api.web.Controllers
         }
 
         // PUT: api/Event/closetopublic/5
-        [HttpPut("{id}")]
         [Route("closetopublic/{id}")]
         public IActionResult CloseEventToPublic(int id)
         {

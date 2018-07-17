@@ -89,6 +89,21 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public void InsertManyMembers(List<int> idMembers, int idGroup)
+        {
+            try
+            {
+                foreach(int id in idMembers)
+                {
+                    JoinGroup(id, idGroup);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region UPDATES
@@ -176,6 +191,7 @@ namespace sportex.api.logic
                 {
                     Group grp = repoGroups.GetById(idGroup);
                     if (grp == null) return "No existe un grupo con ese ID";
+                    else if (ProfileIsMember(idGroup, idProfile)) return profile.FirstName + " " + profile.LastName + " ya pertenece al grupo " + grp.GroupName + ".";
                     else
                     {
                         //Ingresa al grupo

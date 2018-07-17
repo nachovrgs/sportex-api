@@ -143,6 +143,8 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        #region JOIN/LEAVE
+
         [HttpPost]
         [Route("JoinGroup")]
         public IActionResult JoinGroup([FromBody]GroupRequest request)
@@ -182,6 +184,27 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("InsertManyMembers")]
+        public IActionResult InsertManyMembers([FromBody]GroupRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    GroupManager gm = new GroupManager();
+                    gm.InsertManyMembers(request.listIdProfiles, request.idGroup);
+                    return StatusCode(200);
+                }
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
         private void LoadMembers(GroupDTO dto, GroupManager gm)
         {
             try
@@ -203,6 +226,7 @@ namespace sportex.api.web.Controllers
         {
             public int idProfile { get; set; }
             public int idGroup { get; set; }
+            public List<int> listIdProfiles { get; set; }
         }
     }
 }

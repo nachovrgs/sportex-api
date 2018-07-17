@@ -25,13 +25,13 @@ namespace sportex.api.web.Controllers
                 AccountManager am = new AccountManager();
                 List<Account> listAccounts = am.GetAllAccounts();
                 List<AccountDTO> listDTOs = new List<AccountDTO>();
-                foreach(Account account in listAccounts)
+                foreach (Account account in listAccounts)
                 {
                     listDTOs.Add(new AccountDTO(account));
                 }
                 return Ok(listDTOs);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //throw ex;
                 return StatusCode(500);
@@ -46,9 +46,35 @@ namespace sportex.api.web.Controllers
             {
                 AccountManager am = new AccountManager();
                 Account account = am.GetAccountById(id);
-                if(account!=null)
+                if (account != null)
                 {
                     return Ok(new AccountDTO(account));
+                }
+                else
+                {
+                    //mostrar error
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        // GET api/<controller>/5
+        [HttpGet]
+        [Route("token/{id}")]
+        public IActionResult GetAccountToken(int id)
+        {
+            try
+            {
+                AccountManager am = new AccountManager();
+                string token = am.GetAccountToken(id);
+                if (!String.IsNullOrEmpty(token))
+                {
+                    return Ok(token);
                 }
                 else
                 {
@@ -83,6 +109,31 @@ namespace sportex.api.web.Controllers
                         //mostrar error
                         return StatusCode(400);
                     }
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        // PUT api/<controller>/5
+        [HttpPut("{id}")]
+        [Route("token/{id}")]
+        public IActionResult SetToken(int id, [FromBody] TokenRequest tokenRequest)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    AccountManager am = new AccountManager();
+                    am.SetAccountToken(id, tokenRequest.Token);
+                    return StatusCode(200);
                 }
                 else
                 {
@@ -139,6 +190,11 @@ namespace sportex.api.web.Controllers
                 //throw ex;
                 return StatusCode(500);
             }
+        }
+
+        public class TokenRequest
+        {
+            public string Token { get; set; }
         }
     }
 }

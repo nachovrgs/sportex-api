@@ -38,6 +38,22 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+        public string GetAccountToken(int id)
+        {
+            try
+            {
+                Account acc = GetAccountById(id);
+                if (acc != null)
+                {
+                    return acc.Token;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public void InsertAccount(Account account)
         {
             try
@@ -97,6 +113,22 @@ namespace sportex.api.logic
                     accountUpdated.Status = newData.Status;
                     accountUpdated.LastUpdate = DateTime.Now;
                     repo.Update(accountUpdated);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void SetAccountToken(int id, string newToken)
+        {
+            try
+            {
+                Account acc = GetAccountById(id);
+                if (acc != null)
+                {
+                    acc.Token = newToken;
+                    UpdateAccount(acc);
                 }
             }
             catch (Exception ex)

@@ -707,6 +707,22 @@ namespace sportex.api.logic
             }
         }
 
+        public void NotifyAllStarters(string message, NotificationStatus status, NotificationType type, int idEvent)
+        {
+            try
+            {
+                List<EventParticipant> participants = GetParticipantsWithType(idEvent, EventParticipant.ParticipationType.Starting);
+                foreach (EventParticipant participant in participants)
+                {
+                    GenerateNotification(message, status, type, participant.StandardProfileID);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region DATE CONTROLS
@@ -718,6 +734,19 @@ namespace sportex.api.logic
                 eve.Status = 2; //completed
                 //Send review request to participants
                 repoEvents.Update(eve);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void CheckEvents(DateTime timeChecked)
+        {
+            try
+            {
+                CheckCompletedEvents(timeChecked);
+                CheckUpcomingEvents(timeChecked);
             }
             catch (Exception ex)
             {
@@ -745,10 +774,10 @@ namespace sportex.api.logic
         {
             try
             {
-                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => HoursBetweenDates(timeChecked, ev.StartingTime) <= 1 && ev.Status == 1).ToList();
+                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => OneHourAway(timeChecked, ev.StartingTime) && ev.Status == 1).ToList();
                 foreach (Event eve in pastTimeEvents)
                 {
-                    //notify participants
+                    NotifyAllStarters("El evento " + eve.EventName + " comienza en 1 hora! Prepara los botines.", NotificationStatus.NEW, NotificationType.REMINDER, eve.ID);
                 }
             }
             catch (Exception ex)
@@ -757,15 +786,16 @@ namespace sportex.api.logic
             }
         }
 
-        private double HoursBetweenDates(DateTime? date1, DateTime? date2)
+        private bool OneHourAway(DateTime? date1, DateTime? date2)
         {
             try
             {
                 if (date1 != null && date2 != null)
                 {
-                    return ((DateTime)date1 - (DateTime)date2).TotalHours;
+                    double hours = ((DateTime)date2 - (DateTime)date1).TotalHours;
+                    return (hours > 0 && hours <= 1);
                 }
-                return 1000;
+                return false;
             }
             catch (Exception ex)
             {
