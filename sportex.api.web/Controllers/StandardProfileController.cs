@@ -120,7 +120,38 @@ namespace sportex.api.web.Controllers
                 {
                     if (profileDTO != null)
                     {
+                        //StandardProfile profile = profileDTO.MapFromDTO();
                         StandardProfile profile = profileDTO.MapFromDTO();
+                        StandardProfileManager spm = new StandardProfileManager();
+                        spm.InsertProfile(profile);
+                        return StatusCode(201);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // POST api/<controller>
+        [HttpPost]
+        [Route("postapp")]
+        public IActionResult Post2([FromBody]StandardProfileDTO profileDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (profileDTO != null)
+                    {
+                        //StandardProfile profile = profileDTO.MapFromDTO();
+                        StandardProfile profile = profileDTO.MapFromDTO2();
                         StandardProfileManager spm = new StandardProfileManager();
                         spm.InsertProfile(profile);
                         return StatusCode(201);

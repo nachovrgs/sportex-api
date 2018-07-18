@@ -75,5 +75,18 @@ namespace sportex.api.web.DTO
                 throw ex;
             }
         }
+
+        public StandardProfile MapFromDTO2()
+        {
+            try
+            {
+                return new StandardProfile(this.AccountID, this.Account.MapFromDTO(), this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex, this.TotalRate, this.CountReviews);
+                //return new StandardProfile(this.AccountID, null, this.MailAddress, this.FirstName, this.LastName, this.PicturePath, this.DateOfBirth, this.Sex, this.TotalRate, this.CountReviews);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
