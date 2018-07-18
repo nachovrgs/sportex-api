@@ -89,6 +89,9 @@ namespace sportex.api.logic
             {
                 Notification newnot = new Notification(idProfile, status, type, message);
                 InsertNotification(newnot);
+
+                //Generate push notification
+                GeneratePushNotification(message, idProfile);
             }
             catch (Exception ex)
             {
@@ -147,6 +150,25 @@ namespace sportex.api.logic
             }
         }
         #endregion
+
+
+        public void GeneratePushNotification(string message, int profileId)
+        {
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                StandardProfile profile = spm.GetProfileById(profileId);
+                if (profile != null && profile.Account != null && !String.IsNullOrEmpty(profile.Account.Token))
+                {
+                    PushNotification pn = new PushNotification();
+                    pn.SendPushNotification(profile.Account.Token, message);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+            }
+        }
 
     }
 }
