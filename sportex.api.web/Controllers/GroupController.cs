@@ -18,29 +18,33 @@ namespace sportex.api.web.Controllers
     {
         // GET: api/Group
         [HttpGet]
-        public IEnumerable<GroupDTO> Get()
+        public IActionResult Get()
         {
             try
             {
                 GroupManager gm = new GroupManager();
                 List<Group> listGroups = gm.GetAllGroups();
                 List<GroupDTO> listDTOs = new List<GroupDTO>();
+                GroupDTO dto;
                 foreach (Group grp in listGroups)
                 {
-                    listDTOs.Add(new GroupDTO(grp));
+                    dto = new GroupDTO(grp);
+                    LoadMembers(dto, gm);
+                    listDTOs.Add(dto);
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         // GET: api/Group/5
         //[HttpGet("{id}", Name = "Get")]
         [HttpGet("{id}")]
-        public GroupDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
@@ -51,17 +55,44 @@ namespace sportex.api.web.Controllers
                     GroupDTO dto = new GroupDTO(grp);
                     //cargar los miembros
                     LoadMembers(dto, gm);
-                    return dto;
+                    return Ok(dto);
                 }
                 else
                 {
                     //mostrar error
-                    return null;
+                    //return null;
+                    //throw ex;
+                    return StatusCode(400);
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("Joined/{idProfile}")]
+        public IActionResult GetGroupsJoined(int idProfile)
+        {
+            try
+            {
+                GroupManager gm = new GroupManager();
+                List<Group> listGroups = gm.GetGroupsJoinedByProfile(idProfile);
+                List<GroupDTO> listDTOs = new List<GroupDTO>();
+                GroupDTO dto;
+                foreach (Group grp in listGroups)
+                {
+                    dto = new GroupDTO(grp);
+                    LoadMembers(dto, gm);
+                    listDTOs.Add(dto);
+                }
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -91,7 +122,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -123,7 +155,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -139,7 +172,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -161,7 +195,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
         [HttpPost]
@@ -180,7 +215,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -200,7 +236,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
         #endregion

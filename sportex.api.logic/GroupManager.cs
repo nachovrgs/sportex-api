@@ -24,15 +24,15 @@ namespace sportex.api.logic
         {
             try
             {
-                List<Group> Groups = new List<Group>();
-                Groups = repoGroups.GetAll();
+                List<Group> groups = new List<Group>();
+                groups = repoGroups.GetAll();
                 StandardProfileManager spm = new StandardProfileManager();
-                foreach (Group grp in Groups)
+                foreach (Group grp in groups)
                 {
                     grp.CreatorProfile = spm.GetProfileById(grp.StandardProfileID);
                 }
 
-                return Groups;
+                return groups;
             }
             catch (Exception ex)
             {
@@ -51,6 +51,46 @@ namespace sportex.api.logic
                     grp.CreatorProfile = spm.GetProfileById(grp.StandardProfileID);
                 }
                 return grp;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Group> GetGroupsJoinedByProfile(int id)
+        {
+            try
+            {
+                List<Group> groups = new List<Group>();
+                List<GroupMember> members = GetGroupMemberships(id);
+                Group grp;
+                foreach (GroupMember member in members)
+                {
+                    grp = repoGroups.GetById(member.GroupID);
+                    if (grp.Status == 1)
+                    {
+                        groups.Add(grp);
+                    }
+                }
+                StandardProfileManager spm = new StandardProfileManager();
+                foreach (Group grp2 in groups)
+                {
+                    grp2.CreatorProfile = spm.GetProfileById(grp2.StandardProfileID);
+                }
+                return groups;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<GroupMember> GetGroupMemberships(int id)
+        {
+            try
+            {
+                return repoMembers.SearchFor(p => p.StandardProfileID == id);
             }
             catch (Exception ex)
             {
