@@ -88,6 +88,30 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public List<PlayerReview> GetReviewsForEvent(int idEvent)
+        {
+            try
+            {
+                List<PlayerReview> reviews = new List<PlayerReview>();
+                reviews = repoReviews.SearchFor(i => i.EventID == idEvent);
+
+                StandardProfileManager spm = new StandardProfileManager();
+                EventManager em = new EventManager();
+                foreach (PlayerReview rev in reviews)
+                {
+                    rev.ProfileReviews = spm.GetProfileById(rev.IdProfileReviews);
+                    rev.ProfileReviewed = spm.GetProfileById(rev.IdProfileReviewed);
+                    rev.EventReviewed = em.GetEventById(rev.EventID);
+                }
+
+                return reviews;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         public void InsertPlayerReview(PlayerReview rev)
@@ -193,6 +217,19 @@ namespace sportex.api.logic
                 return 0;
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public void DeletePlayerReview(PlayerReview review)
+        {
+            try
+            {
+                repoReviews.Delete(review);
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

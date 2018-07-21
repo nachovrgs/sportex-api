@@ -393,6 +393,16 @@ namespace sportex.api.logic
                 {
                     repoParticipants.Delete(participant);
                 }
+                EventInvitationManager eim = new EventInvitationManager();
+                foreach (EventInvitation invitation in eim.GetAllInvitationsToEvent(id))
+                {
+                    eim.DeleteEventInvitation(invitation);
+                }
+                PlayerReviewManager prm = new PlayerReviewManager();
+                foreach(PlayerReview pr in prm.GetReviewsForEvent(id))
+                {
+                    prm.DeletePlayerReview(pr);
+                }
                 repoEvents.Delete(id);
             }
             catch (Exception ex)

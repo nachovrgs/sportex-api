@@ -88,16 +88,43 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public List<EventInvitation> GetAllInvitationsToEvent(int idEvent)
+        {
+            try
+            {
+                List<EventInvitation> invites = new List<EventInvitation>();
+                invites = repoInvitations.SearchFor(i => i.EventID == idEvent);
+
+                StandardProfileManager spm = new StandardProfileManager();
+                EventManager em = new EventManager();
+                foreach (EventInvitation inv in invites)
+                {
+                    inv.ProfileInvites = spm.GetProfileById(inv.IdProfileInvites);
+                    inv.ProfileInvited = spm.GetProfileById(inv.IdProfileInvited);
+                    inv.EventInvited = em.GetEventById(inv.EventID);
+                }
+
+                return invites;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         public void InsertEventInvitation(EventInvitation inv)
         {
             try
             {
-                inv.Status = 1;
-                inv.CreatedOn = DateTime.Now;
-                inv.LastUpdate = inv.CreatedOn;
-                repoInvitations.Insert(inv);
+                if (inv.IdProfileInvited != inv.IdProfileInvites)
+                {
+                    inv.Status = 1;
+                    inv.CreatedOn = DateTime.Now;
+                    inv.LastUpdate = inv.CreatedOn;
+                    repoInvitations.Insert(inv);
+                }
             }
             catch (Exception ex)
             {
@@ -175,6 +202,19 @@ namespace sportex.api.logic
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public void DeleteEventInvitation(EventInvitation invitation)
+        {
+            try
+            {
+                repoInvitations.Delete(invitation);
             }
             catch (Exception ex)
             {
