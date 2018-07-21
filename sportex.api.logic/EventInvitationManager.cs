@@ -1,5 +1,6 @@
 ﻿using sportex.api.domain;
 using sportex.api.domain.EventClasses;
+using sportex.api.domain.notification;
 using sportex.api.persistence;
 using System;
 using System.Collections.Generic;
@@ -212,6 +213,7 @@ namespace sportex.api.logic
                             string invitationMessage = "Fuiste invitado al evento " + eve.EventName + " por " + eve.CreatorProfile.FullName();
                             invitation = new EventInvitation(EventInvitation.InvitationType.Default, invitationMessage, eve.StandardProfileID, member.StandardProfileID, eve.ID);
                             InsertEventInvitation(invitation);
+                            GenerateNotification(invitationMessage, NotificationStatus.NEW, NotificationType.EVENT_INVITATION, member.StandardProfileID);
                         }
                     }
                 }
@@ -234,6 +236,44 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        #region NOTIFICATIONS
+
+        public void GenerateNotification(string message, NotificationStatus status, NotificationType type, int idProfile)
+        {
+            try
+            {
+                NotificationManager nm = new NotificationManager();
+                nm.GenerateNotification(message, status, type, idProfile);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void GenerateInvitationNotification(int idProfileInvited, int idProfileInvites, int idEventInvited)
+        {
+            try
+            {
+                StandardProfileManager spm = new StandardProfileManager();
+                StandardProfile profileInvites = spm.GetProfileById(idProfileInvites);
+                EventManager em = new EventManager();
+                Event eventInvited = em.GetEventById(idEventInvited);
+                if (profileInvites != null && eventInvited != null)
+                {
+                    string message = "Fuiste invitado al evento " + eventInvited.EventName + " por " + profileInvites.FullName();
+                    NotificationManager nm = new NotificationManager();
+                    nm.GenerateNotification(message, NotificationStatus.NEW, NotificationType.EVENT_INVITATION, idProfileInvited);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
 
     }
 }

@@ -13,8 +13,4 @@
     <ProjectReference Include="..\sportex.api.persistence\sportex.api.persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Certificates\" />
-  </ItemGroup>
-
 </Project>

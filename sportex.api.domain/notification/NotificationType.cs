@@ -14,6 +14,7 @@ namespace sportex.api.domain.notification
         EVENT_PARTICIPANT_JOINED,
         EVENT_PARTICIPANT_DROPED,
         PLAYER_STARTER,
-        PLAYER_REVIEWED
+        PLAYER_REVIEWED,
+        EVENT_INVITATION
     }
 }

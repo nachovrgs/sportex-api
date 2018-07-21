@@ -33,7 +33,7 @@ public class PushNotification
             var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificate.p12");
 
             // Configuration (NOTE: .pfx can also be used here)
-            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, appleCert, "1234567890");
+            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, appleCert, "sportex1234");
 
             // Create a new broker
             var apnsBroker = new ApnsServiceBroker(config);
@@ -97,10 +97,9 @@ public class PushNotification
             apnsBroker.Stop();
 
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            throw ex;
         }
     }
 }

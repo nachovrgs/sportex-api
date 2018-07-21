@@ -87,6 +87,7 @@ namespace sportex.api.web.Controllers
                         EventInvitation inv = invitationDTO.MapFromDTO();
                         EventInvitationManager eim = new EventInvitationManager();
                         eim.InsertEventInvitation(inv);
+                        eim.GenerateInvitationNotification(inv.IdProfileInvited, inv.IdProfileInvites, inv.EventID);
                         return StatusCode(200);
                     }
                     return StatusCode(400);
