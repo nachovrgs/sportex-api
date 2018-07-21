@@ -388,6 +388,27 @@ namespace sportex.api.web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        [Route("JoinEventAdvanced")]
+        public IActionResult JoinEventAdvanced([FromBody]EventRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EventManager em = new EventManager();
+                    em.JoinEventAdvanced(request.idProfile, request.idEvent);
+                    return StatusCode(200);
+                }
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpPost]
         [Route("LeaveEvent")]
         public IActionResult LeaveEvent([FromBody]EventRequest request)

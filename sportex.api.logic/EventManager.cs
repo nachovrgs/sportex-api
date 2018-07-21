@@ -124,7 +124,7 @@ namespace sportex.api.logic
                     eve.Location = lm.GetLocationById(eve.LocationID);
                 }
 
-                return events;
+                return events.OrderBy(e => e.StartingTime).ToList();
             }
             catch (Exception ex)
             {
@@ -478,6 +478,29 @@ namespace sportex.api.logic
 
                     //return resultMessage;
                     return new EventResult(1, resultMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //utilizado para cuando se selecciona de la lista de eventos invitados y eventos publicos
+        public EventResult JoinEventAdvanced(int idProfile, int idEvent)
+        {
+            try
+            {
+                EventInvitationManager eim = new EventInvitationManager();
+                if(eim.ExistsInvitationByProfileAndEvent(idProfile, idEvent))
+                {
+                    //habia invitacion, la acepta
+                    return eim.AcceptEventInvitation(idEvent, idProfile);
+                }
+                else
+                {
+                    //no habia invitacion, debe ser un evento publico
+                    return JoinEvent(idProfile, idEvent);
                 }
             }
             catch (Exception ex)

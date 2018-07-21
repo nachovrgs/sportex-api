@@ -112,6 +112,19 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public bool ExistsInvitationByProfileAndEvent(int idProfile, int idEvent)
+        {
+            try
+            {
+                EventInvitation invitation = repoInvitations.SearchFor(i => i.EventID == idEvent && i.IdProfileInvited == idProfile && i.Status == 1).FirstOrDefault<EventInvitation>();
+                return invitation != null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         public void InsertEventInvitation(EventInvitation inv)
