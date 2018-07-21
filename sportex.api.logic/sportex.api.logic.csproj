@@ -5,8 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PushSharp" Version="4.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\sportex.api.domain\sportex.api.domain.csproj" />
     <ProjectReference Include="..\sportex.api.persistence\sportex.api.persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Certificates\" />
   </ItemGroup>
 
 </Project>
