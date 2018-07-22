@@ -19,7 +19,7 @@ namespace sportex.api.web.Controllers
     {
         [HttpGet]
         [Route("GetEventInvitationsSent/{idProfile}")]
-        public IEnumerable<EventInvitationDTO> GetEventInvitationsSent(int idProfile)
+        public IActionResult GetEventInvitationsSent(int idProfile)
         {
             try
             {
@@ -30,17 +30,18 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new EventInvitationDTO(inv));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet]
         [Route("GetEventInvitationsReceived/{idProfile}")]
-        public IEnumerable<EventInvitationDTO> GetEventInvitationsReceived(int idProfile)
+        public IActionResult GetEventInvitationsReceived(int idProfile)
         {
             try
             {
@@ -51,26 +52,29 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new EventInvitationDTO(inv));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet("{id}")]
-        public EventInvitationDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
                 EventInvitationManager eim = new EventInvitationManager();
                 EventInvitation invitation = eim.GetEventInvitationById(id);
-                return new EventInvitationDTO(invitation);
+                EventInvitationDTO dto = new EventInvitationDTO(invitation);
+                return Ok(dto);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -99,7 +103,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -119,7 +124,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -139,7 +145,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 

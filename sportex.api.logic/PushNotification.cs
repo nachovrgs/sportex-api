@@ -26,11 +26,13 @@ public class PushNotification
 
     public void SendPushNotification(string deviceToken,string message)
     {
+        Exception excep = null;
         try
         {
             string status = "";
             //Get Certificate
-            var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificate.p12");
+            var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificatePrivateKeyOnly.p12");
+            //var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificatePrivateKeyOnly.pfx");
 
             // Configuration (NOTE: .pfx can also be used here)
             var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, appleCert, "sportex1234");
@@ -56,6 +58,7 @@ public class PushNotification
                         string desc = $"Apple Notification Failed: ID={apnsNotification.Identifier}, Code={statusCode}";
                         Console.WriteLine(desc);
                         status = desc;
+                        excep = ex;
                     }
                     else
                     {

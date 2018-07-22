@@ -132,12 +132,15 @@ namespace sportex.api.logic
         {
             try
             {
-                if (inv.IdProfileInvited != inv.IdProfileInvites)
+                if (!ExistsInvitationByProfileAndEvent(inv.IdProfileInvited, inv.EventID))
                 {
-                    inv.Status = 1;
-                    inv.CreatedOn = DateTime.Now;
-                    inv.LastUpdate = inv.CreatedOn;
-                    repoInvitations.Insert(inv);
+                    if (inv.IdProfileInvited != inv.IdProfileInvites)
+                    {
+                        inv.Status = 1;
+                        inv.CreatedOn = DateTime.Now;
+                        inv.LastUpdate = inv.CreatedOn;
+                        repoInvitations.Insert(inv);
+                    }
                 }
             }
             catch (Exception ex)
