@@ -31,11 +31,11 @@ public class PushNotification
         {
             string status = "";
             //Get Certificate
-            var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificatePrivateKeyOnly.p12");
+            var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\SportexPushProd.p12");
             //var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificatePrivateKeyOnly.pfx");
 
             // Configuration (NOTE: .pfx can also be used here)
-            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, appleCert, "sportex1234");
+            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Production, appleCert, "sportex1234");
 
             // Create a new broker
             var apnsBroker = new ApnsServiceBroker(config);
@@ -83,6 +83,7 @@ public class PushNotification
             {
                 // Remove the deviceToken from your database
                 // timestamp is the time the token was reported as expired
+                status = "Apple token has expired!";
             };
 
             // Start Proccess 
@@ -93,7 +94,7 @@ public class PushNotification
                 apnsBroker.QueueNotification(new ApnsNotification
                 {
                     DeviceToken = deviceToken,
-                    Payload = JObject.Parse(("{\"aps\":{\"badge\":1,\"sound\":\"oven.caf\",\"alert\":\"" + (message + "\"}}")))
+                    Payload = JObject.Parse(("{\"aps\":{\"sound\":\"default\",\"alert\":\"" + (message + "\"}}")))
                 });
             }
 
