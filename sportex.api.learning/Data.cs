@@ -8,11 +8,9 @@ namespace sportex.api.learning
 {
     public class Data
     {
-        private string name;
-        private int paramA;
-        private int paramB;
-        private int paramC;
-        private int paramD;
+        private string name; //event name
+        private int age; //average age of participants
+        private int distance; //distance to event
         private int response;
 
         public Data()
@@ -30,46 +28,24 @@ namespace sportex.api.learning
             return this.name;
         }
 
-        public void setParamA(int pa)
+        public void setAge(int pa)
         {
-            this.paramA = pa;
+            this.age = pa;
         }
 
-        public int getParamA()
+        public int getAge()
         {
-            return this.paramA;
+            return this.age;
         }
 
-
-        public void setParamB(int pb)
+        public void setDistance(int pc)
         {
-            this.paramB = pb;
+            this.distance = pc;
         }
 
-        public int getParamB()
+        public int getDistance()
         {
-            return this.paramB;
-        }
-
-
-        public void setParamC(int pc)
-        {
-            this.paramC = pc;
-        }
-
-        public int getParamC()
-        {
-            return this.paramC;
-        }
-
-        public void setParamD(int pd)
-        {
-            this.paramD = pd;
-        }
-
-        public int getParamD()
-        {
-            return this.paramD;
+            return this.distance;
         }
 
         public void setResponse(int res)

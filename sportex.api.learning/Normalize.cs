@@ -8,15 +8,13 @@ namespace sportex.api.learning
 {
     public class Normalize
     {
-        public float paramA;
-        public float paramC;
-        public float paramD;
+        public float age;
+        public float distance;
 
-        public Normalize(Data data, int maxA, int maxC, int maxD)
+        public Normalize(Data data, int maxA, int maxC)
         {
-            paramA = (float)data.getParamA() / (float)maxA;
-            paramC = (float)data.getParamC() / (float)maxC;
-            paramD = (float)data.getParamD() / (float)maxD;
+            age = (float)data.getAge() / (float)maxA;
+            distance = (float)data.getDistance() / (float)maxC;
         }
     }
 }
