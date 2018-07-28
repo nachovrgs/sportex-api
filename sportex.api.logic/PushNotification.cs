@@ -15,13 +15,6 @@ public class PushNotification
 {
     public PushNotification()
     {
-
-        //
-
-        // TODO: Add constructor logic here
-
-        //
-
     }
 
     public void SendPushNotification(string deviceToken,string message)
@@ -30,12 +23,33 @@ public class PushNotification
         try
         {
             string status = "";
-            //Get Certificate
-            var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\SportexPushProd.p12");
-            //var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\AppleCertificatePrivateKeyOnly.pfx");
 
+            //para obtener el certificado desde azure
+            X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            certStore.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                                       X509FindType.FindByThumbprint,
+                                 "SportexPushProd.pfx",
+                                       false);
+            X509Certificate2 cert = null;
+
+            // Get the first cert with the thumbprint
+            if (certCollection.Count > 0)
+            {
+                cert = certCollection[0];
+            }
+            certStore.Close();
+
+            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Production, cert, true);
+            //
+
+
+            //para obtener el certificado desde local
+            //var appleCert = Path.Combine(Directory.GetCurrentDirectory(), @"Certificates\SportexPushProd.p12");
             // Configuration (NOTE: .pfx can also be used here)
-            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Production, appleCert, "sportex1234");
+            //var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Production, appleCert, "sportex1234");
+
+
 
             // Create a new broker
             var apnsBroker = new ApnsServiceBroker(config);
