@@ -149,6 +149,32 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+
+        public void SeeAllNotifications(int profileId)
+        {
+            try
+            {
+                StandardProfile profile = profileManager.GetProfileById(profileId);
+                if (profile == null)
+                {
+                    throw new Exception("Profile could not be found for that ID.");
+                }
+                List<Notification> notifications = new List<Notification>();
+                notifications = notificationRepo.SearchFor(n => n.StandardProfileID == profileId && n.Status == (int)NotificationStatus.NEW);
+                foreach(Notification notification in notifications)
+                {
+                    SeenStatus(notification);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
         #endregion
 
 

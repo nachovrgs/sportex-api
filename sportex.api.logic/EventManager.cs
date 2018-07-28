@@ -576,7 +576,7 @@ namespace sportex.api.logic
                         }
                     }
                     //Notifica a todos los participantes del evento
-                    resultMessage = profile.FullName() + " ha dejado el evento" + eve.EventName + ".";
+                    resultMessage = profile.FullName() + " ha dejado el evento " + eve.EventName + ".";
                     NotifyAllParticipants(resultMessage, NotificationStatus.NEW, NotificationType.EVENT_PARTICIPANT_DROPED, eve.ID);
 
                     return resultMessage;
@@ -807,10 +807,10 @@ namespace sportex.api.logic
         {
             try
             {
-                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => OneHourAway(timeChecked, ev.StartingTime) && ev.Status == 1).ToList();
+                List<Event> pastTimeEvents = repoEvents.SearchFor(ev => HalfHourAway(timeChecked, ev.StartingTime) && ev.Status == 1).ToList();
                 foreach (Event eve in pastTimeEvents)
                 {
-                    NotifyAllStarters("El evento " + eve.EventName + " comienza en 1 hora! Prepara los botines.", NotificationStatus.NEW, NotificationType.REMINDER, eve.ID);
+                    NotifyAllStarters("El evento " + eve.EventName + " comienza en media hora! Prepara los botines.", NotificationStatus.NEW, NotificationType.REMINDER, eve.ID);
                 }
             }
             catch (Exception ex)
@@ -819,14 +819,14 @@ namespace sportex.api.logic
             }
         }
 
-        private bool OneHourAway(DateTime? date1, DateTime? date2)
+        private bool HalfHourAway(DateTime? date1, DateTime? date2)
         {
             try
             {
                 if (date1 != null && date2 != null)
                 {
                     double hours = ((DateTime)date2 - (DateTime)date1).TotalHours;
-                    return (hours > 0 && hours <= 1);
+                    return (hours > 0 && hours <= 0.5);
                 }
                 return false;
             }

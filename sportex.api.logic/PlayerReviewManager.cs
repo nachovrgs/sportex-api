@@ -112,6 +112,19 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
+
+        public bool ReviewExistsFromProfile(int idEvent, int idProfile)
+        {
+            try
+            {
+                PlayerReview review = repoReviews.SearchFor(i => i.EventID == idEvent && i.IdProfileReviews == idProfile).FirstOrDefault();
+                return review != null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         public void InsertPlayerReview(PlayerReview rev)

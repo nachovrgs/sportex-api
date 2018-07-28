@@ -29,7 +29,7 @@ public class PushNotification
             certStore.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection certCollection = certStore.Certificates.Find(
                                        X509FindType.FindByThumbprint,
-                                 "SportexPushProd.pfx",
+                                 "84CE8142DBD5DA1B582A633E3E61385E7539B65B",
                                        false);
             X509Certificate2 cert = null;
 

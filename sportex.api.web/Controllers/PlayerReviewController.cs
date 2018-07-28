@@ -18,7 +18,7 @@ namespace sportex.api.web.Controllers
     {
         [HttpGet]
         [Route("GetPlayerReviewsSent/{idProfile}")]
-        public IEnumerable<PlayerReviewDTO> GetPlayerReviewsSent(int idProfile)
+        public IActionResult GetPlayerReviewsSent(int idProfile)
         {
             try
             {
@@ -29,17 +29,18 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new PlayerReviewDTO(rev));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet]
         [Route("GetPlayerReviewsReceived/{idProfile}")]
-        public IEnumerable<PlayerReviewDTO> GetPlayerReviewsReceived(int idProfile)
+        public IActionResult GetPlayerReviewsReceived(int idProfile)
         {
             try
             {
@@ -50,26 +51,53 @@ namespace sportex.api.web.Controllers
                 {
                     listDTOs.Add(new PlayerReviewDTO(rev));
                 }
-                return listDTOs;
+                return Ok(listDTOs);
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet("{id}")]
-        public PlayerReviewDTO Get(int id)
+        public IActionResult Get(int id)
         {
             try
             {
                 PlayerReviewManager prm = new PlayerReviewManager();
                 PlayerReview review = prm.GetPlayerReviewById(id);
-                return new PlayerReviewDTO(review);
+                return Ok(new PlayerReviewDTO(review));
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet]
+        [Route("reviewexists")]
+        public IActionResult ReviewExists(ReviewAux review)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bool result = false;
+                    PlayerReviewManager prm = new PlayerReviewManager();
+                    result = prm.ReviewExistsFromProfile(review.IdEvent, review.IdProfileReviews);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -97,7 +125,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -117,22 +146,24 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet]
         [Route("GetProfileAverageRating/{idProfile}")]
-        public double GetProfileAverageRating(int idProfile)
+        public IActionResult GetProfileAverageRating(int idProfile)
         {
             try
             {
                 PlayerReviewManager prm = new PlayerReviewManager();
-                return prm.GetProfileAverageRating(idProfile);
+                return Ok(prm.GetProfileAverageRating(idProfile));
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -148,5 +179,13 @@ namespace sportex.api.web.Controllers
         public void Delete(int id)
         {
         }
+
+           
+    }
+
+    public class ReviewAux
+    {
+        public int IdEvent { get; set; }
+        public int IdProfileReviews { get; set; }
     }
 }
