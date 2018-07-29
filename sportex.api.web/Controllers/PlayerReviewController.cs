@@ -76,7 +76,7 @@ namespace sportex.api.web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPut]
         [Route("reviewexists")]
         public IActionResult ReviewExists(ReviewAux review)
         {
