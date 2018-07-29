@@ -15,31 +15,33 @@ namespace sportex.api.web.Controllers
         // GET api/<controller>/5
         [HttpGet("{id}")]
         [Route("profilenotifications/{id}")]
-        public IEnumerable<Notification> GetAll(int id)
+        public IActionResult GetAll(int id)
         {
             try
             {
                 NotificationManager notificationManager = new NotificationManager();
-                return notificationManager.GetAllNotifications(id);
+                return Ok(notificationManager.GetAllNotifications(id));
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
         [HttpGet("{id}")]
         [Route("profilenotificationsunseen/{id}")]
-        public IEnumerable<Notification> GetUnseen(int id)
+        public IActionResult GetUnseen(int id)
         {
             try
             {
                 NotificationManager notificationManager = new NotificationManager();
-                return notificationManager.GetUnseenNotifications(id);
+                return Ok(notificationManager.GetUnseenNotifications(id));
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -60,7 +62,8 @@ namespace sportex.api.web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
@@ -121,6 +124,24 @@ namespace sportex.api.web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        // PUT api/<controller>/5
+        [HttpPut("{idProfile}")]
+        [Route("setallseen/{idProfile}")]
+        public IActionResult SeeAllNotifications(int idProfile)
+        {
+            try
+            {
+                NotificationManager notificationManager = new NotificationManager();
+                notificationManager.SeeAllNotifications(idProfile);
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
             }
         }
 
