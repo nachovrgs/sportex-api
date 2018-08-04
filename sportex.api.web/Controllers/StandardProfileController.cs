@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using sportex.api.domain;
 using sportex.api.logic;
 using sportex.api.web.DTO;
-
 namespace sportex.api.web.Controllers
 {
     [Produces("application/json")]
     [Route("api/standardProfile")]
     public class StandardProfileController : BaseController
     {
+        IConfigurationRoot configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+
         // GET: api/<controller>
         [Authorize]
         [HttpGet]
@@ -218,6 +223,37 @@ namespace sportex.api.web.Controllers
                 //throw ex;
                 return StatusCode(500);
             }
+        }
+
+        // POST api/<controller>
+        [HttpPost]
+        [Route("updateImage/{id}")]
+        public async Task<IActionResult> PostImage(int id, [FromBody] string image)
+        {
+            try
+            {
+                    StandardProfileManager spm = new StandardProfileManager();
+                    StandardProfile profile = spm.GetProfileById(id);
+
+                    if (profile != null)
+                    {
+                        await spm.ProcessImageAsync(profile, image, id);
+                        return Ok(profile);
+                    
+                    }
+                    else
+                    {
+                        //mostrar error
+                        return StatusCode(400);
+                    }
+              
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+
         }
     }
 }

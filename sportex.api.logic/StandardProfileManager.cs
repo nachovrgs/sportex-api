@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Linq;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Threading.Tasks;
 
 namespace sportex.api.logic
 {
@@ -162,6 +165,42 @@ namespace sportex.api.logic
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task ProcessImageAsync(StandardProfile profile, String image, int id)
+        {
+            CloudStorageAccount storageAccount = null;
+            CloudBlobContainer cloudBlobContainer = null;
+            
+            string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=blobsportex1;AccountKey=qNJ/KYpTmeY/uwHp7/jA7SQOJsC2R+VpG1oRe7ILOfV2jznvceWwu0HA/hTrWw7r2fez3gWnfM21JRV3fSqqog==;EndpointSuffix=core.windows.net";
+
+            // Check whether the connection string can be parsed.
+            if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
+            {
+                try
+                {
+                    CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+                    string filename = id + Guid.NewGuid().ToString() + ".jpeg";
+                    CloudBlobContainer container = cloudBlobClient.GetContainerReference("images");
+                    await container.CreateIfNotExistsAsync();
+                    byte[] imageBytes = Convert.FromBase64String(image);
+                    CloudBlockBlob blob = container.GetBlockBlobReference(filename);
+                    await blob.UploadFromByteArrayAsync(imageBytes, 0, imageBytes.Length);
+                    profile.PicturePath = blob.StorageUri.PrimaryUri.AbsoluteUri;
+                    this.UpdateProfile(profile);
+
+                }
+                catch (StorageException ex)
+                {
+                    Console.WriteLine("Error returned from the service: {0}", ex.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    "The connection string is wrong");
             }
         }
     }

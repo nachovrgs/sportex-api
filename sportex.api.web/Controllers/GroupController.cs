@@ -177,6 +177,36 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        // POST api/<controller>
+        [HttpPost]
+        [Route("updateImage/{id}")]
+        public async Task<IActionResult> PostImage(int id, [FromBody] string image)
+        {
+            try
+            {
+                GroupManager gm = new GroupManager();
+                Group updated = gm.GetGroupById(id);
+
+                if (updated != null)
+                {
+                    await gm.ProcessImageAsync(updated, image, id);
+                    return Ok(updated);
+                }
+                else
+                {
+                    //mostrar error
+                    return StatusCode(400);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+
+        }
+
         #region JOIN/LEAVE
 
         [HttpPost]
