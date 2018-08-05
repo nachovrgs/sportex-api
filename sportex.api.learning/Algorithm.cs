@@ -16,7 +16,7 @@ namespace sportex.api.learning
         Distance[] distances;
 
         int maxAge;
-        int maxDistance;
+        double maxDistance;
 
 
         public Algorithm(int k, List<Data> train, List<Data> data)

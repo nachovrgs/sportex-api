@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sportex.api.domain;
+using sportex.api.learning.Helpers;
 using sportex.api.logic;
 using sportex.api.web.DTO;
 
@@ -130,6 +131,39 @@ namespace sportex.api.web.Controllers
             }
         }
 
+        // POST: api/PlayerReview
+        [HttpPost]
+        [Route("processML/{lon}/{lat}")]
+        public async Task<IActionResult> Post(double lon, double lat, [FromBody]PlayerReviewDTO reviewDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (reviewDTO != null)
+                    {
+                        PlayerReview rev = reviewDTO.MapFromDTO();
+                        PlayerReviewManager prm = new PlayerReviewManager();
+                        prm.InsertPlayerReview(rev);
+
+                        //Upload review to blob for ML
+                        await DataHelper.ProccessReview(rev, lon, lat);
+                        return StatusCode(200);
+                    }
+                    return StatusCode(400);
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
         [HttpPost]
         [Route("ReviewAllEventParticipants")]
         public IActionResult ReviewAllEventParticipants([FromBody]PlayerReviewDTO reviewDTO)
@@ -140,6 +174,32 @@ namespace sportex.api.web.Controllers
                 {
                     PlayerReviewManager prm = new PlayerReviewManager();
                     prm.ReviewAllEventParticipants(reviewDTO.EventID, reviewDTO.Rate, reviewDTO.Message, reviewDTO.IdProfileReviews);
+                    return StatusCode(200);
+                }
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        [Route("ReviewAllEventParticipantsML/{lon}/{lat}")]
+        public async Task<IActionResult> ReviewAllEventParticipantsML(double lon, double lat, [FromBody]PlayerReviewDTO reviewDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    PlayerReviewManager prm = new PlayerReviewManager();
+                    prm.ReviewAllEventParticipants(reviewDTO.EventID, reviewDTO.Rate, reviewDTO.Message, reviewDTO.IdProfileReviews);
+
+                    //Upload review to blob for ML
+                    PlayerReview rev = getAllReviewFields(reviewDTO.MapFromDTO());
+                    await DataHelper.ProccessReview(rev, lon, lat);
+
                     return StatusCode(200);
                 }
                 return StatusCode(400);
@@ -180,7 +240,28 @@ namespace sportex.api.web.Controllers
         {
         }
 
-           
+        private PlayerReview getAllReviewFields(PlayerReview rev)
+        {
+            EventManager em = new EventManager();
+
+            try
+            {
+                Event eve = em.GetEventById(rev.EventID);
+                eve.EventParticipates = new List<EventParticipant>();
+                List<EventParticipant> participants = em.GetParticipantsWithType(rev.EventID, EventParticipant.ParticipationType.Starting);
+                foreach (EventParticipant participant in participants.OrderBy(par => par.Order))
+                {
+                    eve.EventParticipates.Add(participant);
+                }
+
+                rev.EventReviewed = eve;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return rev;
+        }
     }
 
     public class ReviewAux

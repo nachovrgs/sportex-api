@@ -11,7 +11,7 @@ namespace sportex.api.learning
         public float age;
         public float distance;
 
-        public Normalize(Data data, int maxA, int maxC)
+        public Normalize(Data data, int maxA, double maxC)
         {
             age = (float)data.getAge() / (float)maxA;
             distance = (float)data.getDistance() / (float)maxC;

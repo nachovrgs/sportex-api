@@ -16,13 +16,13 @@ namespace sportex.api.web.Controllers
     [Route("api/event")]
     public class EventController : BaseController
     {
+        EventManager em = new EventManager();
         // GET: api/event
         [HttpGet]
         public IActionResult Get()
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetAllEvents();
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -53,7 +53,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 Event eve = em.GetEventById(id);
                 if (eve != null)
                 {
@@ -81,7 +80,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventByTimestamp(timestamp);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -114,7 +112,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventByProfileId(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -145,7 +142,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventsJoinedByProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -175,7 +171,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetPastEventsJoinedByProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -205,7 +200,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 List<Event> listEvents = em.GetEventsAvaiableForProfile(profileId);
                 List<EventDTO> listDTOs = new List<EventDTO>();
                 EventDTO dto;
@@ -216,10 +210,31 @@ namespace sportex.api.web.Controllers
                     LoadStartersAndSubs(dto, em);
                     listDTOs.Add(dto);
                 }
-                //foreach (Event eve in listEvents)
-                //{
-                //    listDTOs.Add(new EventDTO(eve));
-                //}
+                return Ok(listDTOs);
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return StatusCode(500); ;
+            }
+        }
+
+        [HttpGet("{profileId}")]
+        [Route("avaiableML/{profileId}/{lon}/{lat}")]
+        public async Task<IActionResult> GetEventsAvaiableML(int profileId, double lon, double lat)
+        {
+            try
+            {
+                List<Event> listEvents = await em.GetEventsAvaiableForProfileML(profileId, lon, lat);
+                List<EventDTO> listDTOs = new List<EventDTO>();
+                EventDTO dto;
+                foreach (Event eve in listEvents)
+                {
+                    dto = new EventDTO(eve);
+                    //cargar los starters y subtitutes
+                    LoadStartersAndSubs(dto, em);
+                    listDTOs.Add(dto);
+                }
                 return Ok(listDTOs);
             }
             catch (Exception ex)
@@ -242,7 +257,6 @@ namespace sportex.api.web.Controllers
                     if (eventDTO != null)
                     {
                         Event eve = eventDTO.MapFromDTO();
-                        EventManager em = new EventManager();
                         em.InsertEvent(eve);
                         em.JoinEvent(eve.StandardProfileID, eve.ID);
                         return Ok(eve.ID);
@@ -271,7 +285,6 @@ namespace sportex.api.web.Controllers
                 {
                     if (eventDTO != null)
                     {                        
-                        EventManager em = new EventManager();
                         Event updated = em.GetEventById(id);
                         if (updated != null)
                         {
@@ -302,7 +315,6 @@ namespace sportex.api.web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EventManager em = new EventManager();
                     Event updated = em.GetEventById(id);
                     if (updated != null)
                     {
@@ -330,7 +342,6 @@ namespace sportex.api.web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EventManager em = new EventManager();
                     Event updated = em.GetEventById(id);
                     if (updated != null)
                     {
@@ -358,7 +369,6 @@ namespace sportex.api.web.Controllers
         {
             try
             {
-                EventManager em = new EventManager();
                 em.DeleteEvent(id);
                 return StatusCode(200);
                    
@@ -377,7 +387,6 @@ namespace sportex.api.web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EventManager em = new EventManager();
                     em.JoinEvent(request.idProfile, request.idEvent);
                     return StatusCode(200);
                 }
@@ -397,7 +406,6 @@ namespace sportex.api.web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EventManager em = new EventManager();
                     em.JoinEventAdvanced(request.idProfile, request.idEvent);
                     return StatusCode(200);
                 }
@@ -417,7 +425,6 @@ namespace sportex.api.web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EventManager em = new EventManager();
                     em.LeaveEvent(request.idProfile, request.idEvent);
                     return StatusCode(200);
                 }

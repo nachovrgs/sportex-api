@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\sportex.api.domain\sportex.api.domain.csproj" />
+    <ProjectReference Include="..\sportex.api.learning\sportex.api.learning.csproj" />
     <ProjectReference Include="..\sportex.api.persistence\sportex.api.persistence.csproj" />
   </ItemGroup>
 

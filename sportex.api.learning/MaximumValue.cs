@@ -9,7 +9,7 @@ namespace sportex.api.learning
     class MaximumValue
     {
         int maxAge = 0;
-        int maxDistance = 0;
+        double maxDistance = 0;
 
         List<Data> lData = new List<Data>();
 
@@ -43,7 +43,7 @@ namespace sportex.api.learning
             return this.maxAge;
         }
 
-        public int getMaxDistance()
+        public double getMaxDistance()
         {
             return this.maxDistance;
         }
