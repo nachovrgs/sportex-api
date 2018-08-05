@@ -35,7 +35,10 @@ namespace sportex.api.learning.Helpers
                     //Create CSV
                     using (Stream memoryStream = new MemoryStream())
                     {
-                        StreamWriter streamWriter = new StreamWriter(memoryStream);
+                        StreamWriter streamWriter = new StreamWriter(memoryStream)
+                        {
+                            AutoFlush = true
+                        };
                         // List the blobs in the container.
                         int howMany = 0;
                         BlobContinuationToken blobContinuationToken = null;
@@ -63,9 +66,9 @@ namespace sportex.api.learning.Helpers
                         using (var streamReader = new StreamReader(memoryStream))
                         {
                             var csvReader = new CsvReader(streamReader);
-
                             csvReader.Configuration.RegisterClassMap<DataMap>();
                             csvReader.Configuration.Delimiter = ",";
+
                             csvReader.Configuration.HasHeaderRecord = false;
                             csvReader.Configuration.IgnoreBlankLines = false;
 
