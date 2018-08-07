@@ -1,11 +1,14 @@
 ﻿using sportex.api.domain;
 using sportex.api.domain.EventClasses;
 using sportex.api.domain.notification;
+using sportex.api.learning;
+using sportex.api.learning.Helpers;
 using sportex.api.persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace sportex.api.logic
 {
@@ -14,10 +17,12 @@ namespace sportex.api.logic
         #region PROPERTIES
         private IRepository<Event> repoEvents;
         private IRepository<EventParticipant> repoParticipants;
+        private static List<Data> trainingData;
         public EventManager()
         {
             repoEvents = new Repository<Event>();
             repoParticipants = new Repository<EventParticipant>();
+            trainingData = new List<Data>();
         }
         #endregion
 
@@ -52,8 +57,6 @@ namespace sportex.api.logic
             try
             {
                 Event eve = repoEvents.GetById(id);
-                //IRepository<StandardProfile> repoStandardProfile = new Repository<StandardProfile>();
-                //eve.CreatorProfile = repoStandardProfile.GetById(eve.StandardProfileID);
                 if (eve != null)
                 {
                     StandardProfileManager spm = new StandardProfileManager();
@@ -68,7 +71,7 @@ namespace sportex.api.logic
                 throw ex;
             }
         }
-
+        
         public List<Event> GetEventByProfileId(int profileId)
         {
             try
@@ -214,6 +217,12 @@ namespace sportex.api.logic
                 LocationManager lm = new LocationManager();
                 foreach (Event eve in events)
                 {
+                    eve.EventParticipates = new List<EventParticipant>();
+                    List<EventParticipant> participants = GetParticipantsWithType(eve.ID, EventParticipant.ParticipationType.Starting);
+                    foreach (EventParticipant participant in participants.OrderBy(par => par.Order))
+                    {
+                        eve.EventParticipates.Add(participant);
+                    }
                     eve.CreatorProfile = spm.GetProfileById(eve.StandardProfileID);
                     eve.Location = lm.GetLocationById(eve.LocationID);
                 }
@@ -241,6 +250,54 @@ namespace sportex.api.logic
             }
         }
 
+        public async Task<List<Event>> GetAllPublicNonJoinedEventsML(int idProfile, double longitude, double latitude)
+        {
+            try
+            {
+                List<Event> publicEvents = GetAllPublicEvents();
+                List<Event> joinedEvents = GetEventsJoinedByProfile(idProfile);
+                publicEvents.RemoveAll(a => joinedEvents.Exists(b => a.ID == b.ID));
+
+                //Check if training data has been loaded
+                if(trainingData.Count == 0)
+                {
+                    trainingData = await DataHelper.LoadData();
+                }
+                if (trainingData.Count > 0)
+                {
+                    //Training Data available. Running ML
+                    List<Data> evaluatingData = new List<Data>();
+                    foreach (var eve in publicEvents)
+                    {
+                        Data eventToRank = new Data()
+                        {
+                            age = DataHelper.GetAverageAge(eve),
+                            distance = DataHelper.GetDistance(eve, latitude, longitude),
+                            eventId = eve.ID
+                        };
+                        evaluatingData.Add(eventToRank);
+                    }
+                    int k = 1;
+                    Algorithm algorith = new Algorithm(k, trainingData, evaluatingData);
+                    algorith.runkNN();
+                    //Now data must be ranked
+                    List<Data> results = algorith.getDataList();
+                    foreach (var data in results)
+                    {
+                        if (data.response == 0)
+                        {
+                            //Event will NOT be liked. Removing it from list
+                            publicEvents.RemoveAll(a => a.ID == data.eventId);
+                        }
+                    }
+                }                
+                return publicEvents;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public List<Event> GetEventsAvaiableForProfile(int id)
         {
             try
@@ -260,6 +317,24 @@ namespace sportex.api.logic
             }
         }
 
+        public async Task<List<Event>> GetEventsAvaiableForProfileML(int id, double longitude, double latitude)
+        {
+            try
+            {
+                List<Event> invitedEvents = GetEventsInvited(id);
+                List<Event> publicEvents = await GetAllPublicNonJoinedEventsML(id, longitude, latitude);
+                //List<Event> union = joinedEvents.Union<Event>(publicEvents).ToList();
+                //List<Event> distinct = union.GroupBy(eve => eve.ID).Select(e => e.First()).ToList();
+                //List<Event> ordered = distinct.OrderByDescending(eve => eve.StartingTime).ToList();
+                List<Event> avaiableEvents = invitedEvents.Union(publicEvents).GroupBy(eve => eve.ID).Select(e => e.First()).OrderBy(eve => eve.StartingTime).ToList();
+
+                return avaiableEvents;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region INSERTS

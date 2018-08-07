@@ -8,9 +8,8 @@ namespace sportex.api.learning
 {
     class MaximumValue
     {
-        int maxA = 0;
-        int maxC = 0;
-        int maxD = 0;
+        int maxAge = 0;
+        double maxDistance = 0;
 
         List<Data> lData = new List<Data>();
 
@@ -23,42 +22,31 @@ namespace sportex.api.learning
         {
             for (int i = 0; i < this.lData.Count; i++)
             {
-                //find maxA
-                if (this.lData[i].getParamA() > maxA)
+                //find max
+                if (this.lData[i].getAge() > maxAge)
                 {
-                    maxA = this.lData[i].getParamA();
+                    maxAge = this.lData[i].getAge();
                 }
 
-                //find maxC
-                if (this.lData[i].getParamC() > maxC)
+                //find maxDistance
+                if (this.lData[i].getDistance() > maxDistance)
                 {
-                    maxC = this.lData[i].getParamC();
-                }
-
-
-                //find maxNumcard
-                if (this.lData[i].getParamD() > maxD)
-                {
-                    maxD = this.lData[i].getParamD();
+                    maxDistance = this.lData[i].getDistance();
                 }
 
             }//end loop
         }
 
 
-        public int getMaxA()
+        public int getMaxAge()
         {
-            return this.maxA;
+            return this.maxAge;
         }
 
-        public int getMaxC()
+        public double getMaxDistance()
         {
-            return this.maxC;
+            return this.maxDistance;
         }
 
-        public int getMaxD()
-        {
-            return this.maxD;
-        }
     }
 }

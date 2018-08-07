@@ -15,9 +15,8 @@ namespace sportex.api.learning
 
         Distance[] distances;
 
-        int maxA;
-        int maxC;
-        int maxD;
+        int maxAge;
+        double maxDistance;
 
 
         public Algorithm(int k, List<Data> train, List<Data> data)
@@ -34,9 +33,8 @@ namespace sportex.api.learning
             MaximumValue maximum = new MaximumValue(train);
             maximum.findAllMax();
 
-            maxA = maximum.getMaxA();
-            maxC = maximum.getMaxC();
-            maxD = maximum.getMaxD();
+            maxAge = maximum.getMaxAge();
+            maxDistance = maximum.getMaxDistance();
 
 
         }
@@ -44,7 +42,7 @@ namespace sportex.api.learning
         public void setResponse(Data data)
         {
             //normalize data
-            Normalize ndata = new Normalize(data, maxA, maxC, maxD);
+            Normalize ndata = new Normalize(data, maxAge, maxDistance);
 
 
             //calculate all distances
@@ -55,20 +53,14 @@ namespace sportex.api.learning
                 distances[i].index = i;
 
                 //normalize element
-                Normalize tmp = new Normalize(this.trainset[i], maxA, maxC, maxD);
+                Normalize tmp = new Normalize(this.trainset[i], maxAge, maxDistance);
 
 
                 //distance between two age normalized
-                distances[i].distance = distances[i].distance + getDistance(ndata.paramA, tmp.paramA);
-
-                //distance between two gender
-                distances[i].distance = distances[i].distance + getDistance(data.getParamB(), this.trainset[i].getParamB());
+                distances[i].distance = distances[i].distance + getDistance(ndata.age, tmp.age);
 
                 //distance between two incoming normalized
-                distances[i].distance = distances[i].distance + getDistance(ndata.paramC, tmp.paramC);
-
-                //distance between two number of card normalized
-                distances[i].distance = distances[i].distance + getDistance(ndata.paramD, tmp.paramD);
+                distances[i].distance = distances[i].distance + getDistance(ndata.distance, tmp.distance);
 
             }// end loop
 

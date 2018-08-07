@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sportex.api.logic", "sportex.api.logic\sportex.api.logic.csproj", "{C5AB3B5E-8138-47CC-A7CA-A16DE7F951D5}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sportex.api.domain", "sport
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sportex.api.controls", "sportex.api.controls\sportex.api.controls.csproj", "{0CBF4700-008E-4DF8-824B-859A91AD16C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sportex.api.learning", "sportex.api.learning\sportex.api.learning.csproj", "{4C3F2487-4D61-48CB-A793-981D23D1774C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sportex.api.learning", "sportex.api.learning\sportex.api.learning.csproj", "{360F935A-4783-4CD8-BAB9-8EFF18FD5260}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{0CBF4700-008E-4DF8-824B-859A91AD16C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CBF4700-008E-4DF8-824B-859A91AD16C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CBF4700-008E-4DF8-824B-859A91AD16C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C3F2487-4D61-48CB-A793-981D23D1774C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C3F2487-4D61-48CB-A793-981D23D1774C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C3F2487-4D61-48CB-A793-981D23D1774C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C3F2487-4D61-48CB-A793-981D23D1774C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360F935A-4783-4CD8-BAB9-8EFF18FD5260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360F935A-4783-4CD8-BAB9-8EFF18FD5260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360F935A-4783-4CD8-BAB9-8EFF18FD5260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360F935A-4783-4CD8-BAB9-8EFF18FD5260}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
