@@ -212,7 +212,7 @@ namespace sportex.api.logic
             try
             {
                 List<Event> events = new List<Event>();
-                events = repoEvents.SearchFor(ev => ev.IsPublic == true && ev.Status==1);
+                events = repoEvents.SearchFor(ev => ev.IsPublic == true && ev.Status==1).OrderBy(eve => eve.StartingTime).ToList();
                 StandardProfileManager spm = new StandardProfileManager();
                 LocationManager lm = new LocationManager();
                 foreach (Event eve in events)
@@ -254,6 +254,7 @@ namespace sportex.api.logic
         {
             try
             {
+                List<Event> publicEventsOrdered = new List<Event>();
                 List<Event> publicEvents = GetAllPublicEvents();
                 List<Event> joinedEvents = GetEventsJoinedByProfile(idProfile);
                 publicEvents.RemoveAll(a => joinedEvents.Exists(b => a.ID == b.ID));
@@ -277,21 +278,15 @@ namespace sportex.api.logic
                         };
                         evaluatingData.Add(eventToRank);
                     }
-                    int k = 1;
+                    int k = 3;
                     Algorithm algorith = new Algorithm(k, trainingData, evaluatingData);
                     algorith.runkNN();
                     //Now data must be ranked
                     List<Data> results = algorith.getDataList();
-                    foreach (var data in results)
-                    {
-                        if (data.response == 0)
-                        {
-                            //Event will NOT be liked. Removing it from list
-                            publicEvents.RemoveAll(a => a.ID == data.eventId);
-                        }
-                    }
+                    List<int> resultsIds = results.OrderBy(data => data.response).Reverse().Select(data => data.eventId).ToList();
+                    publicEventsOrdered = publicEvents.OrderBy(e => resultsIds.IndexOf(e.ID)).ToList();
                 }                
-                return publicEvents;
+                return publicEventsOrdered;
             }
             catch (Exception ex)
             {
